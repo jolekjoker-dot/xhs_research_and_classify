@@ -1,0 +1,83 @@
+# 小红书知识库 — 分类体系配置
+# 主分类 > 子分类层级结构
+categories:
+  技术编程:
+    label: "技术编程"
+    subcategories:
+      - Python
+      - JavaScript/TypeScript
+      - Go
+      - Rust
+      - Java/Kotlin
+      - AI/机器学习
+      - 后端架构
+      - 前端开发
+      - DevOps/运维
+      - 数据库
+
+  产品设计:
+    label: "产品设计"
+    subcategories:
+      - 产品方法论
+      - UX/UI 设计
+      - 用户研究
+      - 交互设计
+      - 设计系统
+
+  商业分析:
+    label: "商业分析"
+    subcategories:
+      - 行业趋势
+      - 商业模式
+      - 增长策略
+      - 数据分析
+      - 市场营销
+
+  职业发展:
+    label: "职业发展"
+    subcategories:
+      - 求职面试
+      - 薪资谈判
+      - 远程工作
+      - 自由职业
+      - 创业经验
+
+  工具资源:
+    label: "工具资源"
+    subcategories:
+      - 效率工具
+      - 开源项目
+      - 学习资源
+      - API/服务推荐
+      - 硬件设备
+
+  生活方式:
+    label: "生活方式"
+    subcategories:
+      - 数字游民
+      - 知识管理
+      - 阅读笔记
+      - 效率方法
+
+# LLM 分类提示词
+classification_prompt: |
+  你是一个内容分类专家。请对以下小红书帖子内容进行分类。
+
+  分类体系：
+  {categories_text}
+
+  请返回 JSON 格式：
+  {{
+    "category": "主分类",
+    "sub_category": "子分类",
+    "summary": "100-200字中文摘要",
+    "keywords": ["关键词1", "关键词2", ...],
+    "entities": ["实体1", "实体2", ...],
+    "sentiment": "positive/neutral/negative",
+    "quality_score": 8.5
+  }}
+
+  质量评分标准 (0-10)：
+  - 8-10: 内容详实、结构清晰、有独特见解
+  - 5-7: 内容完整、有一定参考价值
+  - 0-4: 内容简短、信息量少或纯广告

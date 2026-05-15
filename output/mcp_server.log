@@ -1,0 +1,59 @@
+[2026-05-13 11:39:28] START MCP Server
+[2026-05-13 11:39:39] Embedding model preloaded OK (dim=512)
+[2026-05-13 11:42:44] START MCP Server
+[2026-05-13 11:42:58] START MCP Server
+[2026-05-13 11:43:02] Embedding preload failed (non-fatal): [Errno 22] Invalid argument
+[2026-05-13 11:44:21] START MCP Server
+[2026-05-13 11:44:41] Embedding model preloaded OK (dim=512)
+[2026-05-13 11:45:34] CALL search_kb | args={"query": "RAG 向量检索", "top_k": 5}
+[2026-05-13 11:45:34] OK   search_kb | 0.6s | result=6882 chars
+[2026-05-13 11:46:58] START MCP Server
+[2026-05-13 11:47:15] START MCP Server
+[2026-05-13 11:47:25] Embedding model preloaded OK (dim=512)
+[2026-05-13 11:47:35] START MCP Server
+[2026-05-13 11:47:44] Embedding model preloaded OK (dim=512)
+[2026-05-13 11:50:05] START MCP Server
+[2026-05-13 11:50:25] Embedding model preloaded OK (dim=512)
+[2026-05-13 11:52:59] START MCP Server
+[2026-05-13 12:49:04] CALL search_kb | args={"query": "RAG chunk优化策略", "top_k": 3}
+[2026-05-13 12:49:05] OK   search_kb | 0.6s | result=5426 chars
+[2026-05-13 12:49:27] START MCP Server
+[2026-05-13 12:49:40] Embedding model preloaded OK (dim=512)
+[2026-05-13 12:50:13] CALL search_kb | args={"query": "agent面试", "top_k": 5}
+[2026-05-13 12:50:13] OK   search_kb | 0.6s | result=7219 chars
+[2026-05-13 12:56:30] START MCP Server
+[2026-05-13 12:56:43] Embedding model preloaded OK (dim=512)
+[2026-05-13 12:57:25] CALL search_xhs | args={"keyword": "大模型", "count": 5}
+[2026-05-13 12:57:36] OK   search_xhs | 11.0s | result=500 chars
+[2026-05-13 12:58:48] CALL run_pipeline | args={"keyword": "大模型", "count": 5}
+[2026-05-13 13:01:13] OK   run_pipeline | 145.5s | result=127 chars
+[2026-05-13 13:11:24] START MCP Server
+[2026-05-13 13:11:34] Embedding model preloaded OK (dim=512)
+[2026-05-13 13:13:05] CALL run_pipeline | args={"keyword": "大模型面试", "count": 5}
+[2026-05-13 13:14:37] OK   run_pipeline | 91.9s | result=128 chars
+[2026-05-13 13:29:54] CALL run_pipeline | args={"keyword": "大模型面试", "count": 5}
+[2026-05-13 13:31:06] OK   run_pipeline | 71.9s | result=122 chars
+[2026-05-13 13:33:24] START MCP Server
+[2026-05-13 13:33:38] Embedding model preloaded OK (dim=512)
+[2026-05-13 13:34:10] CALL run_pipeline | args={"keyword": "python"}
+[2026-05-13 13:37:22] OK   run_pipeline | 192.0s | result=130 chars
+[2026-05-13 16:49:52] START MCP Server
+[2026-05-13 16:50:20] Embedding model preloaded OK (dim=512)
+[2026-05-14 11:40:36] START MCP Server
+[2026-05-14 11:40:53] Embedding model preloaded OK (dim=512)
+[2026-05-15 11:29:09] START MCP Server
+[2026-05-15 11:29:11] START MCP Server
+[2026-05-15 11:29:14] START MCP Server
+[2026-05-15 11:29:23] Embedding model preloaded OK (dim=512)
+[2026-05-15 11:29:24] Embedding model preloaded OK (dim=512)
+[2026-05-15 11:29:25] Embedding model preloaded OK (dim=512)
+[2026-05-15 11:44:15] START MCP Server
+[2026-05-15 11:44:25] Embedding model preloaded OK (dim=512)
+[2026-05-15 13:13:01] START MCP Server
+[2026-05-15 13:13:11] Embedding preload failed (non-fatal): [Errno 22] Invalid argument
+[2026-05-15 13:14:27] START MCP Server
+[2026-05-15 13:14:37] Embedding preload failed (non-fatal): [Errno 22] Invalid argument
+[2026-05-15 13:15:22] START MCP Server
+[2026-05-15 13:15:32] Embedding model preloaded OK (dim=512)
+[2026-05-15 14:06:21] START MCP Server
+[2026-05-15 14:06:35] Embedding model preloaded OK (dim=512)
