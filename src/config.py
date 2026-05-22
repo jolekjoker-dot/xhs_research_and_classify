@@ -40,6 +40,9 @@ class Config:
     # Knowledge base
     kb_template: str = "default"
 
+    # LLM concurrency
+    llm_max_workers: int = 5
+
     def load_categories(self) -> dict[str, Any]:
         """加载分类体系配置"""
         path = self.config_dir / "categories.yaml"

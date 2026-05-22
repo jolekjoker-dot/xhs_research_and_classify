@@ -1,5 +1,6 @@
 import json
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 
 from openai import OpenAI
@@ -11,6 +12,7 @@ from src.models import ClassifiedPost, XHSPost
 log = get_logger(__name__)
 
 MIN_CONTENT_LENGTH = 100
+DEFAULT_MAX_WORKERS = 5
 
 
 def _build_classification_prompt(post: XHSPost) -> str:
@@ -136,12 +138,22 @@ def classify_post(
 
 def classify_posts(
     posts: list[XHSPost],
+    max_workers: int = DEFAULT_MAX_WORKERS,
 ) -> list[ClassifiedPost]:
-    """classify multiple posts, returns list of ClassifiedPost"""
-    results: list[ClassifiedPost] = []
-    for i, post in enumerate(posts):
-        log.info("[%d/%d] Classifying %s", i + 1, len(posts), post.post_id)
-        classified = classify_post(post)
-        results.append(classified)
+    """classify multiple posts in parallel via ThreadPoolExecutor"""
+    if not posts:
+        return []
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {executor.submit(classify_post, post): i for i, post in enumerate(posts)}
+        results: list[Optional[ClassifiedPost]] = [None] * len(posts)
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                results[idx] = future.result()
+            except Exception:
+                log.exception("Classify worker failed for post[%d]", idx)
+                results[idx] = _fallback_classify(posts[idx])
+
     log.info("Classify batch complete: %d posts", len(results))
     return results

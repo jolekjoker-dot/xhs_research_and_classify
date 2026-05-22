@@ -192,6 +192,9 @@ def cmd_run(args: argparse.Namespace) -> None:
     add_file_handler(log)
     tracker = ProgressTracker(log)
 
+    config = get_config()
+    max_workers = config.llm_max_workers
+
     keywords = [k.strip() for k in args.keywords.split(",") if k.strip()]
     count = args.count
     headless = not args.no_headless
@@ -218,14 +221,14 @@ def cmd_run(args: argparse.Namespace) -> None:
         return
 
     # Phase 4: Format
-    tracker.step_start(f"[3/5] Format: {len(scraped)} posts")
+    tracker.step_start(f"[3/5] Format: {len(scraped)} posts (workers={max_workers})")
     from src.classify.formatter import format_posts
-    scraped = format_posts(scraped)
+    scraped = format_posts(scraped, max_workers=max_workers)
     tracker.step_end("format", f"{len(scraped)} done")
 
     # Phase 5: Classify
-    tracker.step_start(f"[4/5] Classify: {len(scraped)} posts")
-    classified = classify_posts(scraped)
+    tracker.step_start(f"[4/5] Classify: {len(scraped)} posts (workers={max_workers})")
+    classified = classify_posts(scraped, max_workers=max_workers)
     tracker.step_end("classify", f"{len(classified)} done")
 
     # Phase 5: Build

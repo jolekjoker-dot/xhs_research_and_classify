@@ -1,6 +1,7 @@
 """Content formatter — use LLM to clean and structure scraped/OCR text"""
 
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 
 from openai import OpenAI
@@ -9,6 +10,7 @@ from src.logger import get_logger
 from src.models import XHSPost
 
 log = get_logger(__name__)
+DEFAULT_MAX_WORKERS = 5
 
 FORMAT_PROMPT = """你是一个内容整理专家。请对以下从小红书帖子抓取的内容进行格式化整理。
 
@@ -84,9 +86,21 @@ def format_content(
         return post
 
 
-def format_posts(posts: list[XHSPost]) -> list[XHSPost]:
-    """format multiple posts"""
-    for i, post in enumerate(posts):
-        log.info("[%d/%d] Formatting %s", i + 1, len(posts), post.post_id)
-        format_content(post)
-    return posts
+def format_posts(posts: list[XHSPost], max_workers: int = DEFAULT_MAX_WORKERS) -> list[XHSPost]:
+    """format multiple posts in parallel via ThreadPoolExecutor"""
+    if not posts:
+        return posts
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_idx = {executor.submit(format_content, post): i for i, post in enumerate(posts)}
+        results = [None] * len(posts)
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                results[idx] = future.result()
+            except Exception:
+                log.exception("Format worker failed for post[%d]", idx)
+                results[idx] = posts[idx]
+                # Preserve original post on failure
+
+    return results
