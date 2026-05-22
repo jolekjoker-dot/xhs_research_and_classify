@@ -111,3 +111,22 @@
 2026-05-13 10:58:45 | INFO    | xhs.search | START  | search: ['agent面试'], count=3
 2026-05-13 10:59:19 | INFO    | xhs.search | agent面试: 0 results
 2026-05-13 10:59:19 | INFO    | xhs.search | END    | search — saved to output/search_results.json
+2026-05-19 16:23:46 | INFO    | xhs.search | START  | search: ['agent 面经'], count=50
+2026-05-19 16:24:20 | INFO    | xhs.search | agent 面经: 50 results
+2026-05-19 16:24:20 | INFO    | xhs.search | END    | search — saved to output/search_results.json
+2026-05-19 16:24:29 | INFO    | xhs.run | START  | [1/4] Search: ['agent 面经']
+2026-05-19 16:25:08 | INFO    | xhs.run | END    | search — 30 results
+2026-05-19 16:25:08 | INFO    | xhs.run | START  | [2/4] Scrape: 30 urls, keyword=agent 面经
+2026-05-19 16:49:03 | INFO    | xhs.run | START  | [1/4] Search: ['agent 面经']
+2026-05-19 16:49:43 | INFO    | xhs.run | END    | search — 27 results
+2026-05-19 16:49:43 | INFO    | xhs.run | START  | [2/4] Scrape: 27 urls, keyword=agent 面经
+2026-05-19 16:49:47 | INFO    | xhs.run | START  | [1/4] Search: ['agent 面经']
+2026-05-19 16:54:50 | INFO    | xhs.run | START  | [1/4] Search: ['agent 面经']
+2026-05-19 16:55:54 | INFO    | xhs.run | END    | scrape — 7 posts
+2026-05-19 16:55:54 | INFO    | xhs.run | START  | [3/5] Format: 7 posts
+2026-05-19 16:55:56 | INFO    | xhs.run | END    | format — 7 done
+2026-05-19 16:55:56 | INFO    | xhs.run | START  | [4/5] Classify: 7 posts
+2026-05-19 16:55:58 | INFO    | xhs.run | END    | classify — 7 done
+2026-05-19 16:55:58 | INFO    | xhs.run | START  | [5/5] Build knowledge base
+2026-05-19 16:55:58 | INFO    | xhs.run | END    | build — KB at output\knowledge_base
+2026-05-19 16:55:58 | INFO    | xhs.run | Workflow complete! Open output\knowledge_base/INDEX.md
