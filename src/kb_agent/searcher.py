@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from src.config import get_config
 from src.kb_agent.rag_engine import hybrid_search, keyword_search, semantic_search
 from src.logger import get_logger
 
@@ -35,6 +36,8 @@ def search(
     Returns:
         deduplicated results sorted by relevance, each with title/path/score/summary
     """
+    config = get_config()
+
     if layers is None:
         layers = ["hybrid"]
 
@@ -51,7 +54,7 @@ def search(
     if "hybrid" in layers and "hybrid" not in layers:
         pass  # hybrid already included via keyword+semantic
     elif "hybrid" in layers:
-        hy = hybrid_search(query, top_k)
+        hy = hybrid_search(query, top_k, rerank=config.rerank_enabled)
         # hybrid results may overlap with individual layers, merge carefully
         seen_titles = {r.get("title", "") for r in all_results}
         for r in hy:

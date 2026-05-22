@@ -80,6 +80,9 @@ class Config:
     # LLM concurrency
     llm_max_workers: int = 5
 
+    # Retrieval
+    rerank_enabled: bool = True
+
     # Neo4j
     neo4j_uri: str = field(
         default_factory=lambda: os.getenv("NEO4J_URI", "bolt://localhost:7687")

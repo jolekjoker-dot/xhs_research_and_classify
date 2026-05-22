@@ -1,5 +1,6 @@
 """RAG search engine — semantic + keyword hybrid search over local KB"""
 
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import chromadb
@@ -10,6 +11,7 @@ from src.logger import get_logger
 log = get_logger(__name__)
 
 KB_DIR = Path("output/knowledge_base")
+RRF_K = 60
 
 
 def _parse_md_meta_body(filepath: Path) -> tuple[dict, str]:
@@ -139,27 +141,81 @@ def semantic_search(query: str, top_k: int = 10) -> list[dict]:
     return output
 
 
-def hybrid_search(query: str, top_k: int = 10) -> list[dict]:
-    """combined keyword + semantic search with result fusion"""
-    kw_results = keyword_search(query, top_k)
-    sem_results = semantic_search(query, top_k)
+def hybrid_search(query: str, top_k: int = 10, rerank: bool = True) -> list[dict]:
+    """combined keyword + semantic search with RRF fusion + optional rerank"""
+    # parallel keyword + semantic
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        kw_future = executor.submit(keyword_search, query, top_k)
+        sem_future = executor.submit(semantic_search, query, top_k)
+        kw_results = kw_future.result()
+        sem_results = sem_future.result()
 
     if not kw_results and not sem_results:
         return []
 
-    # merge and dedup by path
-    merged: dict[str, dict] = {}
-    for r in kw_results:
-        key = r.get("path", r.get("title", ""))
-        merged[key] = dict(r)
-    for r in sem_results:
-        key = r.get("path", r.get("title", ""))
-        if key in merged:
-            # hybrid: average of both scores
-            merged[key]["score"] = round((merged[key]["score"] + r["score"]) / 2, 3)
-            merged[key]["method"] = "hybrid"
-        else:
-            merged[key] = dict(r)
+    # RRF fusion (replaces simple score averaging)
+    merged = _rrf_fusion(kw_results, sem_results)
+    merged = merged[:max(top_k, 20)]  # keep 20 for reranker
 
-    combined = sorted(merged.values(), key=lambda x: -x["score"])
-    return combined[:top_k]
+    if rerank and len(merged) > 5:
+        merged = _rerank(query, merged, top_k=min(top_k, 5))
+
+    return merged[:top_k]
+
+
+def _rrf_fusion(list_a: list[dict], list_b: list[dict], k: int = RRF_K) -> list[dict]:
+    """Reciprocal Rank Fusion — merges two ranked lists by rank position"""
+    scores: dict[str, float] = {}
+    lookup: dict[str, dict] = {}
+
+    for rank, item in enumerate(list_a):
+        key = item.get("path", item.get("title", str(rank)))
+        scores[key] = scores.get(key, 0) + 1.0 / (k + rank + 1)
+        lookup[key] = item
+
+    for rank, item in enumerate(list_b):
+        key = item.get("path", item.get("title", str(rank)))
+        scores[key] = scores.get(key, 0) + 1.0 / (k + rank + 1)
+        if key not in lookup:
+            lookup[key] = item
+
+    ranked = sorted(scores.items(), key=lambda x: -x[1])
+    result = []
+    for doc_id, rrf_score in ranked:
+        item = lookup.get(doc_id)
+        if item:
+            item = dict(item)
+            item["score"] = round(rrf_score, 3)
+            item["method"] = "hybrid"
+            result.append(item)
+    return result
+
+
+def _get_reranker():
+    """lazy-load reranker singleton"""
+    global _reranker
+    if _reranker is None:
+        try:
+            from src.kb_agent.reranker import ReRanker
+            _reranker = ReRanker()
+        except ImportError:
+            log.warning("Reranker not available")
+            _reranker = False  # type: ignore
+    return _reranker if _reranker is not False else None
+
+
+_reranker = None
+
+
+def _rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
+    """re-rank candidates with Cross-Encoder if available"""
+    model = _get_reranker()
+    if model is None:
+        return candidates[:top_k]
+    try:
+        result = model.rerank(query, candidates, top_k=top_k)
+        if result:
+            return result
+    except Exception:
+        log.exception("Rerank error, falling back to RRF")
+    return candidates[:top_k]
