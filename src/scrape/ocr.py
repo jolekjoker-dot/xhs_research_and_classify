@@ -125,17 +125,16 @@ def merge_ocr_texts(texts: list[str], min_overlap: int = 15) -> str:
 
 
 def ocr_images(image_paths: list[str], skip_duplicates: bool = True) -> str:
-    """extract text from images, skipping small/duplicate images"""
+    """extract text from images using batch inference (single PaddleOCR call)"""
     backend = _get_backend()
     if backend is None:
         log.warning("OCR not available, skipping %d images", len(image_paths))
         return ""
 
-    texts: list[str] = []
     seen_hashes: set[int] = set()
     skipped_small = 0
     skipped_dup = 0
-    content_images = []
+    content_images: list[Path] = []
 
     for path in image_paths:
         p = Path(path)
@@ -153,14 +152,38 @@ def ocr_images(image_paths: list[str], skip_duplicates: bool = True) -> str:
         seen_hashes.add(file_hash)
         content_images.append(p)
 
-    for i, p in enumerate(content_images):
-        try:
-            log.info("OCR [%d/%d] %s", i + 1, len(content_images), p.name)
-            text = ocr_image(str(p))
-            if text:
-                texts.append(text)
-        except Exception:
-            log.warning("OCR error for: %s", p.name)
+    if not content_images:
+        log.info("OCR: no content images (skipped %d small + %d dup)", skipped_small, skipped_dup)
+        return ""
+
+    # batch inference: pass all image paths at once
+    batch_paths = [str(p) for p in content_images]
+    module_name = type(backend).__module__
+    texts: list[str] = []
+
+    try:
+        if "paddleocr" in module_name:
+            results = backend.ocr(batch_paths, cls=True)
+            if results:
+                for entry in (results or []):
+                    if entry:
+                        lines = [line[1][0] for line in entry if line[1][0]]
+                        if lines:
+                            texts.append("\n".join(lines))
+        elif "easyocr" in module_name:
+            for p in batch_paths:
+                result = backend.readtext(p, detail=0)
+                if result:
+                    texts.append("\n".join(result))
+    except Exception:
+        log.exception("Batch OCR failed, falling back to per-image")
+        for p in content_images:
+            try:
+                text = ocr_image(str(p))
+                if text:
+                    texts.append(text)
+            except Exception:
+                log.warning("OCR error for: %s", p.name)
 
     log.info("OCR: %d texts / %d images (skipped %d small + %d dup)",
              len(texts), len(image_paths), skipped_small, skipped_dup)

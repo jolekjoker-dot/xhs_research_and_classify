@@ -232,11 +232,24 @@ def cmd_run(args: argparse.Namespace) -> None:
     tracker.step_end("classify", f"{len(classified)} done")
 
     # Phase 5: Build
-    tracker.step_start(f"[5/5] Build knowledge base")
+    tracker.step_start(f"[5/6] Build knowledge base")
     root = build_knowledge_base(classified)
     tracker.step_end("build", f"KB at {root}")
 
-    log.info("Workflow complete! Open %s/INDEX.md", root)
+    # Phase 6: Knowledge graph
+    tracker.step_start(f"[6/6] Build knowledge graph")
+    try:
+        from src.knowledge_base.graph import KnowledgeGraph
+        graph = KnowledgeGraph()
+        graph.build(classified)
+        viz_path = graph.export_for_viz()
+        graph.close()
+        tracker.step_end("graph", f"Graph exported → {viz_path}")
+    except Exception:
+        log.exception("Knowledge graph build failed (non-fatal)")
+        tracker.step_end("graph", "skipped (error)")
+
+    log.info("Workflow complete! Open %s/INDEX.md or %s/graph.html", root, root)
 
 
 def build_parser() -> argparse.ArgumentParser:
