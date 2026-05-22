@@ -156,34 +156,15 @@ def ocr_images(image_paths: list[str], skip_duplicates: bool = True) -> str:
         log.info("OCR: no content images (skipped %d small + %d dup)", skipped_small, skipped_dup)
         return ""
 
-    # batch inference: pass all image paths at once
-    batch_paths = [str(p) for p in content_images]
-    module_name = type(backend).__module__
+    # PaddleOCR det=True does not support list input — process images sequentially
     texts: list[str] = []
-
-    try:
-        if "paddleocr" in module_name:
-            results = backend.ocr(batch_paths, cls=True)
-            if results:
-                for entry in (results or []):
-                    if entry:
-                        lines = [line[1][0] for line in entry if line[1][0]]
-                        if lines:
-                            texts.append("\n".join(lines))
-        elif "easyocr" in module_name:
-            for p in batch_paths:
-                result = backend.readtext(p, detail=0)
-                if result:
-                    texts.append("\n".join(result))
-    except Exception:
-        log.exception("Batch OCR failed, falling back to per-image")
-        for p in content_images:
-            try:
-                text = ocr_image(str(p))
-                if text:
-                    texts.append(text)
-            except Exception:
-                log.warning("OCR error for: %s", p.name)
+    for p in content_images:
+        try:
+            text = ocr_image(str(p))
+            if text:
+                texts.append(text)
+        except Exception:
+            log.warning("OCR error for: %s", p.name)
 
     log.info("OCR: %d texts / %d images (skipped %d small + %d dup)",
              len(texts), len(image_paths), skipped_small, skipped_dup)

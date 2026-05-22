@@ -373,9 +373,133 @@ except ImportError:
 
 当前已有 checkpoint 机制（`output/checkpoint_scrape.json`），但仅覆盖抓取阶段。可以扩展到全流程：每个阶段完成后记录进度，中断后从上次阶段继续。
 
-### 5.4 图片去重
+### 5.5 图片去重
 
 同一张图片可能出现在多篇帖子中（转发/引用场景）。在下载前计算图片 hash，跳过已存在的图片，节省存储和带宽。
+
+---
+
+## 五-BIS、检索重排（RRF + Cross-Encoder）
+
+### 5B.1 当前问题
+
+当前检索使用 **Bi-Encoder（GTE embedding）**：query 和文档分别独立编码为向量，通过余弦相似度排序。这是一种"双塔"架构——query 和 doc 彼此看不见，无法捕捉交互语义。
+
+具体问题：
+- keyword search 和 semantic search 的分数分布不同（keyword 是 [0,1] 匹配度，semantic 是余弦距离），直接平均不合理
+- 语义相关但内容浅的帖子可能排在关键词精确匹配但质量高的前面
+- 没有精排步骤，粗排结果直接返回给用户
+
+### 5B.2 方案：RRF 融合 + Cross-Encoder 重排
+
+检索链路从粗排一步到位改为两段式：
+
+```
+当前:  keyword + semantic → 简单平均 → top-5
+
+改进:
+  Step 1: keyword + semantic → RRF 融合 → 粗排 top-20
+  Step 2: RRF top-20 → bge-reranker (Cross-Encoder) → 精排 top-5
+```
+
+**RRF (Reciprocal Rank Fusion)**：
+
+```
+RRF_score = Σ 1/(k + rank_i)    k 取 60
+```
+
+RRF 不看原始分值，只看排名位置。keyword 返回 10 条排 1-10，semantic 返回 10 条排 1-10——两个不可比较的分数分布，通过 RRF 统一为"在两个列表中各自的排名位置"。天然适合多路召回融合，比简单平均更稳健。
+
+**bge-reranker-v2-m3 (Cross-Encoder)**：
+
+| | Bi-Encoder (当前) | Cross-Encoder (新增) |
+|---|---|---|
+| 原理 | query/doc 独立编码→向量→余弦 | [query, doc] 拼接→模型→分数 |
+| 交互 | 无，query 和 doc 彼此看不见 | 有，每个 token 都能看到对方的 token |
+| 速度 | 快，doc 向量可预计算 | 慢，每对 query-doc 需完整推理 |
+| 精度 | 中等 | 高——能理解同义词、否定、上下文 |
+| 用法 | 全量粗排 | 仅对 top-20 精排 |
+
+### 5B.3 实现要点
+
+```python
+# src/kb_agent/reranker.py（新文件）
+from FlagEmbedding import FlagReranker
+
+class ReRanker:
+    def __init__(self):
+        self._model = None
+
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = FlagReranker(
+                "BAAI/bge-reranker-v2-m3",
+                use_fp16=True,
+            )
+        return self._model
+
+    def rerank(self, query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
+        """对候选文档重排序，返回 top-k"""
+        if not candidates:
+            return []
+        pairs = [(query, c["document"]) for c in candidates]
+        scores = self.model.compute_score(pairs)
+        ranked = sorted(zip(candidates, scores), key=lambda x: -x[1])
+        return [r for r, _ in ranked[:top_k]]
+```
+
+```python
+# rag_engine.py hybrid_search 改造示意
+def hybrid_search(query: str, top_k: int = 20, rerank: bool = True) -> list[dict]:
+    kw_results = keyword_search(query, top_k=top_k)
+    sem_results = semantic_search(query, top_k=top_k)
+
+    # RRF 融合替代简单平均
+    merged = _rrf_fusion(kw_results, sem_results, k=60)
+    merged = merged[:top_k]
+
+    if rerank:
+        merged = _get_reranker().rerank(query, merged, top_k=5)
+
+    return merged
+
+def _rrf_fusion(list_a: list, list_b: list, k: int = 60) -> list:
+    """Reciprocal Rank Fusion"""
+    scores: dict[str, float] = {}
+    for rank, item in enumerate(list_a):
+        doc_id = item.get("id", item.get("path", str(rank)))
+        scores[doc_id] = scores.get(doc_id, 0) + 1.0 / (k + rank + 1)
+    for rank, item in enumerate(list_b):
+        doc_id = item.get("id", item.get("path", str(rank)))
+        scores[doc_id] = scores.get(doc_id, 0) + 1.0 / (k + rank + 1)
+    ranked = sorted(scores.items(), key=lambda x: -x[1])
+    # resolve back to actual items from the higher-ranked source
+    lookup = {item.get("id", item.get("path", str(i))): item
+              for i, item in enumerate(list_a + list_b)}
+    return [lookup[doc_id] for doc_id, _ in ranked if doc_id in lookup]
+```
+
+### 5B.4 改动范围
+
+| 文件 | 改动 |
+|------|------|
+| `src/kb_agent/reranker.py`（新） | ReRanker 类，加载 bge-reranker-v2-m3，提供 `rerank()` |
+| `src/kb_agent/rag_engine.py` | `hybrid_search` 改为 RRF 融合；新增 `rerank` 参数 |
+| `src/kb_agent/searcher.py` | 检索前默认启用重排 |
+| `src/config.py` | 新增 `rerank_enabled: bool = True` |
+
+### 5B.5 新增依赖
+
+```bash
+pip install FlagEmbedding
+```
+
+### 5B.6 性能影响
+
+- 模型首次加载：~30s，~500MB
+- 每次检索额外耗时：~0.1-0.2s（仅对 20 对做 Cross-Encoder 推理）
+- 检索质量：显著提升
 
 ---
 
@@ -390,9 +514,11 @@ except ImportError:
 | **P2** | 抓取并行化 | ~2h | scraper.py | 2-3x 加速抓取阶段 |
 | **P2** | Pipeline 流水线化 | ~4h | cli.py + 各模块 | 端到端加速 |
 | **P2** | LLM 响应缓存 | ~1h | formatter.py, classifier.py | 重复搜索场景有收益 |
+| **P3** | RRF 多路融合 | ~0.5h | rag_engine.py | 检索排序更合理 |
+| **P3** | bge-reranker 重排 | ~1h | 新增 reranker.py, rag_engine.py, searcher.py, config.py | 检索精准度质变 |
 | **P3** | 搜索并行化 | ~1h | searcher.py | 多关键词场景加速 |
-| **P3** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
-| **P3** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
+| **P4** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
+| **P4** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
 
 ---
 
@@ -411,5 +537,9 @@ except ImportError:
 - 端到端进一步加速
 - 需要较多测试（反爬风险）
 
-**第四阶段（2-3h）**：缓存 + 去重 + protobuf
+**第四阶段（1.5-2h）**：RRF 融合 + bge-reranker 重排 + 搜索并行化
+- 检索质量质变，从"能用"到"精准"
+- 改动集中在 kb_agent 模块，风险低
+
+**第五阶段（1-2h）**：protobuf 加速 + 图片去重
 - 锦上添花，长久运行收益累积

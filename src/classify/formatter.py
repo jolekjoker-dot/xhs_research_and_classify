@@ -1,7 +1,10 @@
 """Content formatter — use LLM to clean and structure scraped/OCR text"""
 
+import hashlib
+import json
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
 from typing import Optional
 
 from openai import OpenAI
@@ -11,6 +14,7 @@ from src.models import XHSPost
 
 log = get_logger(__name__)
 DEFAULT_MAX_WORKERS = 5
+CACHE_DIR = Path("output/cache/format")
 
 FORMAT_PROMPT = """你是一个内容整理专家。请对以下从小红书帖子抓取的内容进行格式化整理。
 
@@ -52,9 +56,23 @@ def format_content(
     if len(combined) < 100:
         return post  # too short, format not needed
 
-    key = api_key or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-    url = api_base or "https://api.deepseek.com/v1"
-    model_name = model or "deepseek-chat"
+    # check cache
+    content_hash = hashlib.sha256(combined.encode()).hexdigest()
+    cache_file = CACHE_DIR / f"{content_hash}.json"
+    if cache_file.exists():
+        try:
+            cached = json.loads(cache_file.read_text(encoding="utf-8"))
+            post.content = cached["formatted"]
+            log.info("Format cache hit for %s", post.post_id)
+            return post
+        except Exception:
+            pass  # cache corrupt, re-fetch
+
+    from src.config import get_config as _get_config
+    cfg = _get_config()
+    key = api_key or cfg.api_key
+    url = api_base or cfg.api_base_url
+    model_name = model or cfg.api_model
 
     if not key:
         log.warning("No API key, skipping format")
@@ -71,13 +89,21 @@ def format_content(
                 {"role": "user", "content": prompt},
             ],
             temperature=0.1,
-            max_tokens=3000,
+            max_tokens=4096,
         )
-        formatted = response.choices[0].message.content or ""
+        msg = response.choices[0].message
+        formatted = msg.content or ""
+        if not formatted.strip():
+            reasoning = getattr(msg, "reasoning_content", None) or ""
+            if reasoning:
+                formatted = reasoning
         if formatted.strip():
             post.content = formatted.strip()
-            # Keep ocr_text as fallback — builder will deduplicate if content
-            # already contains the OCR text.
+            CACHE_DIR.mkdir(parents=True, exist_ok=True)
+            cache_file.write_text(
+                json.dumps({"formatted": formatted.strip(), "original": content_hash}, ensure_ascii=False),
+                encoding="utf-8",
+            )
             log.info("Formatted: %d chars → %d chars", len(combined), len(formatted))
         return post
 

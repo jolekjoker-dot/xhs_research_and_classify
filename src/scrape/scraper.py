@@ -1,7 +1,10 @@
 import json
 import random
 import re
+import shutil
+import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
@@ -19,6 +22,7 @@ log = get_logger(__name__)
 USER_DATA_DIR = Path.home() / ".xhs_browser_profile"
 CHECKPOINT_FILE = Path("output/checkpoint_scrape.json")
 IMAGE_DIR = Path("output/knowledge_base/images")
+STORAGE_STATE_FILE = Path("output/xhs_storage.json")
 
 
 class XHSScrapeError(Exception):
@@ -631,7 +635,153 @@ def scrape_from_results(
     keyword: str = "",
     headless: bool = True,
     resume: bool = True,
+    max_concurrent: int = 1,
 ) -> list[XHSPost]:
     """convenience: scrape posts from search results"""
     urls = [r.url for r in results]
+    if max_concurrent > 1:
+        return scrape_posts_parallel(urls, keyword=keyword, headless=headless, resume=resume, max_concurrent=max_concurrent)
     return scrape_posts(urls, keyword=keyword, headless=headless, resume=resume)
+
+
+def _export_storage_state(headless: bool = True) -> None:
+    """export auth cookies/storage from persistent profile to a sharable file"""
+    if STORAGE_STATE_FILE.exists():
+        return
+    log.info("Exporting storage state from %s ...", USER_DATA_DIR)
+    try:
+        with sync_playwright() as pw:
+            context = pw.chromium.launch_persistent_context(
+                user_data_dir=str(USER_DATA_DIR),
+                channel="chrome",
+                headless=headless,
+                viewport={"width": 1280, "height": 900},
+                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"],
+            )
+            STORAGE_STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            context.storage_state(path=str(STORAGE_STATE_FILE))
+            context.close()
+        log.info("Storage state exported → %s", STORAGE_STATE_FILE)
+    except Exception:
+        log.exception("Failed to export storage state, parallel scrape may not work")
+
+
+def scrape_posts_parallel(
+    urls: list[str],
+    keyword: str = "",
+    headless: bool = True,
+    resume: bool = True,
+    max_concurrent: int = 2,
+) -> list[XHSPost]:
+    """scrape posts in parallel using independent browser instances
+
+    Each worker loads the shared storage_state (cookies) instead of using
+    the persistent profile, avoiding directory-lock conflicts.
+    """
+    if max_concurrent <= 1:
+        return scrape_posts(urls, keyword=keyword, headless=headless, resume=resume)
+
+    posts: list[XHSPost] = []
+    scraped_ids = _load_checkpoint() if resume else set()
+
+    remaining_urls = [u for u in urls if u.rstrip("/").split("/")[-1] not in scraped_ids]
+    skipped = len(urls) - len(remaining_urls)
+    if skipped > 0:
+        log.info("Resuming: %d already scraped, %d remaining", skipped, len(remaining_urls))
+
+    if not remaining_urls:
+        return posts
+
+    # ensure storage state is exported for workers
+    _export_storage_state(headless)
+
+    effective_workers = min(max_concurrent, len(remaining_urls))
+    log.info("Parallel scrape: %d urls, %d workers", len(remaining_urls), effective_workers)
+
+    def _scrape_one(url: str) -> XHSPost:
+        """scrape a single post using its own browser with shared auth"""
+        config = get_config()
+        post_id = url.rstrip("/").split("/")[-1]
+        search_kw = keyword or post_id
+
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(
+                channel="chrome",
+                headless=headless,
+                args=["--disable-blink-features=AutomationControlled", "--no-sandbox"],
+            )
+            context = browser.new_context(
+                storage_state=str(STORAGE_STATE_FILE) if STORAGE_STATE_FILE.exists() else None,
+                viewport={"width": 1280, "height": 900},
+                user_agent=(
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+                ),
+            )
+            page = context.new_page()
+
+            try:
+                search_url = f"https://www.xiaohongshu.com/search_result?keyword={quote(search_kw)}&sort=general"
+                page.goto(search_url, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_timeout(4000)
+
+                # find and click matching card
+                cards = page.query_selector_all(
+                    "section.note-item a[href*='/explore/'], .note-item a[href*='/explore/']"
+                )
+                clicked = False
+                for card in cards:
+                    href = card.get_attribute("href") or ""
+                    if post_id in href:
+                        try:
+                            card.scroll_into_view_if_needed()
+                            page.wait_for_timeout(500)
+                            card.click(force=True, timeout=10000)
+                            page.wait_for_timeout(8000)
+                            clicked = True
+                            break
+                        except Exception:
+                            continue
+
+                if not clicked:
+                    raise XHSPostNotFound(f"Cannot find note card for: {post_id}")
+
+                detail_text = _extract_note_detail(page)
+                if not detail_text:
+                    raise XHSScrapeError(f"No content found for: {post_id}")
+
+                post = _parse_note_text(detail_text, url, post_id)
+
+                image_urls = _extract_images(page)
+                if image_urls:
+                    local_images = _download_images(post_id, image_urls) or []
+                    post.image_urls = local_images or image_urls
+
+                    if local_images:
+                        from src.scrape.ocr import ocr_images
+                        ocr_text = ocr_images(local_images)
+                        if ocr_text:
+                            post.ocr_text = ocr_text
+
+                log.info("Scraped OK: %s (%d chars)", post_id, len(detail_text))
+                return post
+
+            finally:
+                context.close()
+                browser.close()
+
+    with ThreadPoolExecutor(max_workers=effective_workers) as executor:
+        future_to_url = {executor.submit(_scrape_one, url): url for url in remaining_urls}
+        for future in as_completed(future_to_url):
+            url = future_to_url[future]
+            try:
+                post = future.result()
+                posts.append(post)
+                _save_checkpoint(post.post_id)
+            except XHSScrapeError as e:
+                log.error("Scrape failed: %s — %s", url, e)
+            except Exception:
+                log.exception("Unexpected error scraping: %s", url)
+
+    log.info("Scrape parallel complete: %d success / %d total", len(posts), len(urls))
+    return posts

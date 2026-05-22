@@ -5,6 +5,15 @@ from typing import Any
 
 import yaml
 
+# auto-load .env if present
+try:
+    from dotenv import load_dotenv
+    _env_path = Path(__file__).resolve().parent.parent / ".env"
+    if _env_path.exists():
+        load_dotenv(_env_path, override=True)
+except ImportError:
+    pass
+
 
 @dataclass
 class Config:
@@ -14,18 +23,46 @@ class Config:
     output_dir: Path = field(default_factory=lambda: Path("output/knowledge_base"))
     config_dir: Path = field(default_factory=lambda: Path("config"))
 
-    # DeepSeek API
-    api_base_url: str = field(
-        default_factory=lambda: os.getenv(
-            "ANTHROPIC_BASE_URL", "https://api.deepseek.com/anthropic"
-        )
+    # ── LLM Provider ────────────────────────────────────────────
+    # Set ANTHROPIC_PROVIDER to "xiaomi" or "deepseek" (default).
+    # Each provider has its own env vars for key/model/base_url.
+
+    api_provider: str = field(
+        default_factory=lambda: os.getenv("ANTHROPIC_PROVIDER", "deepseek")
     )
-    api_key: str = field(
-        default_factory=lambda: os.getenv("ANTHROPIC_AUTH_TOKEN", "")
-    )
-    api_model: str = field(
-        default_factory=lambda: os.getenv("ANTHROPIC_MODEL", "deepseek-chat")
-    )
+
+    # Per-provider defaults
+    _PROVIDER_DEFAULTS: dict = field(default_factory=lambda: {
+        "deepseek": {
+            "base_url": "https://api.deepseek.com/v1",
+            "model": "deepseek-chat",
+            "key_env": "DEEPSEEK_API_KEY",
+        },
+        "xiaomi": {
+            "base_url": "https://token-plan-cn.xiaomimimo.com/anthropic",
+            "model": "mimo-v2.5",
+            "key_env": "XIAOMI_API_KEY",
+        },
+    })
+
+    @property
+    def api_base_url(self) -> str:
+        provider = self._PROVIDER_DEFAULTS.get(self.api_provider, self._PROVIDER_DEFAULTS["deepseek"])
+        return os.getenv("ANTHROPIC_BASE_URL", provider["base_url"])
+
+    @property
+    def api_key(self) -> str:
+        provider = self._PROVIDER_DEFAULTS.get(self.api_provider, self._PROVIDER_DEFAULTS["deepseek"])
+        # ANTHROPIC_AUTH_TOKEN explicitly set (even to empty) takes priority
+        token = os.getenv("ANTHROPIC_AUTH_TOKEN")
+        if token is not None:
+            return token
+        return os.getenv(provider["key_env"], "")
+
+    @property
+    def api_model(self) -> str:
+        provider = self._PROVIDER_DEFAULTS.get(self.api_provider, self._PROVIDER_DEFAULTS["deepseek"])
+        return os.getenv("ANTHROPIC_MODEL", provider["model"])
 
     # Search defaults
     search_max_results: int = 20
@@ -34,7 +71,7 @@ class Config:
     # Scrape defaults
     scrape_min_delay: float = 3.0
     scrape_max_delay: float = 8.0
-    scrape_max_concurrent: int = 1
+    scrape_max_concurrent: int = 1  # XHS requires persistent profile, cannot share across processes
     scrape_timeout: int = 30
 
     # Knowledge base

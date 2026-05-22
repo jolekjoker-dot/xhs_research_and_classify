@@ -5,6 +5,7 @@ _os.environ.setdefault("PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION", "python")
 import argparse
 import json
 import sys
+import time
 from pathlib import Path
 
 from src.config import get_config
@@ -182,10 +183,12 @@ def cmd_build(args: argparse.Namespace) -> None:
 
 
 def cmd_run(args: argparse.Namespace) -> None:
-    """完整 Workflow: search → scrape → classify → build"""
+    """完整 Workflow: search → scrape ⇢ format ⇢ classify → build (streaming pipeline)"""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     from src.search.searcher import search_batch
-    from src.scrape.scraper import scrape_from_results
-    from src.classify.classifier import classify_posts
+    from src.scrape.scraper import scrape_posts_parallel
+    from src.classify.classifier import classify_post
+    from src.classify.formatter import format_content
     from src.knowledge_base.builder import build_knowledge_base
 
     log = get_logger("xhs.run")
@@ -193,51 +196,85 @@ def cmd_run(args: argparse.Namespace) -> None:
     tracker = ProgressTracker(log)
 
     config = get_config()
-    max_workers = config.llm_max_workers
+    llm_workers = config.llm_max_workers
+    scrape_workers = config.scrape_max_concurrent
 
     keywords = [k.strip() for k in args.keywords.split(",") if k.strip()]
     count = args.count
     headless = not args.no_headless
     resume = not args.no_resume
 
-    # Phase 2: Search
-    tracker.step_start(f"[1/4] Search: {keywords}")
+    # Phase 1: Search
+    tracker.step_start(f"[1/5] Search: {keywords}")
     all_results = search_batch(keywords, count_per=count, headless=headless)
     total_results = sum(len(v) for v in all_results.values())
     tracker.step_end("search", f"{total_results} results")
 
-    # Phase 3: Scrape
-    all_urls = []
+    all_urls: list[str] = []
     for results in all_results.values():
-        if results:
-            all_urls.extend(results)
+        for r in results:
+            all_urls.append(r.url)
     kw = keywords[0] if keywords else ""
-    tracker.step_start(f"[2/4] Scrape: {len(all_urls)} urls, keyword={kw}")
-    scraped = scrape_from_results(all_urls, keyword=kw, headless=headless, resume=resume)
-    tracker.step_end("scrape", f"{len(scraped)} posts")
 
-    if not scraped:
-        log.error("No posts scraped, aborting")
+    if not all_urls:
+        log.error("No search results, aborting")
         return
 
-    # Phase 4: Format
-    tracker.step_start(f"[3/5] Format: {len(scraped)} posts (workers={max_workers})")
-    from src.classify.formatter import format_posts
-    scraped = format_posts(scraped, max_workers=max_workers)
-    tracker.step_end("format", f"{len(scraped)} done")
+    # ── Streaming pipeline ──────────────────────────────────────
 
-    # Phase 5: Classify
-    tracker.step_start(f"[4/5] Classify: {len(scraped)} posts (workers={max_workers})")
-    classified = classify_posts(scraped, max_workers=max_workers)
-    tracker.step_end("classify", f"{len(classified)} done")
+    tracked_posts: list = []
+    t0 = time.time()
 
-    # Phase 5: Build
-    tracker.step_start(f"[5/6] Build knowledge base")
+    log.info("[2/5] Pipeline: scrape(%d workers) ⇢ format(%d workers) ⇢ classify(%d workers)",
+             scrape_workers, llm_workers, llm_workers)
+    log.info("Processing %d urls...", len(all_urls))
+
+    with ThreadPoolExecutor(max_workers=llm_workers) as format_exec:
+        with ThreadPoolExecutor(max_workers=llm_workers) as classify_exec:
+
+            # Scrape in parallel → stream into format executor
+            scraped = scrape_posts_parallel(
+                all_urls, keyword=kw, headless=headless, resume=resume,
+                max_concurrent=scrape_workers,
+            )
+
+            if not scraped:
+                log.error("No posts scraped, aborting")
+                return
+
+            # Submit all for formatting
+            fmt_futures = {format_exec.submit(format_content, p): p for p in scraped}
+            formatted_posts = []
+            for ff in as_completed(fmt_futures):
+                try:
+                    formatted_posts.append(ff.result())
+                except Exception:
+                    log.exception("Format failed")
+                    formatted_posts.append(fmt_futures[ff])
+
+            # Submit formatted for classification
+            cls_futures = {classify_exec.submit(classify_post, p): p for p in formatted_posts}
+            classified = []
+            for cf in as_completed(cls_futures):
+                try:
+                    classified.append(cf.result())
+                except Exception:
+                    log.exception("Classify failed")
+
+    elapsed = time.time() - t0
+    log.info("Pipeline complete: %d posts in %.1fs", len(classified), elapsed)
+
+    if not classified:
+        log.error("No posts classified, aborting")
+        return
+
+    # Phase 4: Build
+    tracker.step_start(f"[4/5] Build knowledge base")
     root = build_knowledge_base(classified)
     tracker.step_end("build", f"KB at {root}")
 
-    # Phase 6: Knowledge graph
-    tracker.step_start(f"[6/6] Build knowledge graph")
+    # Phase 5: Knowledge graph
+    tracker.step_start(f"[5/5] Build knowledge graph")
     try:
         from src.knowledge_base.graph import KnowledgeGraph
         graph = KnowledgeGraph()

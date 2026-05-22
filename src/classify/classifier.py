@@ -1,6 +1,9 @@
+import hashlib
 import json
 import os
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
 from typing import Optional
 
 from openai import OpenAI
@@ -13,6 +16,7 @@ log = get_logger(__name__)
 
 MIN_CONTENT_LENGTH = 100
 DEFAULT_MAX_WORKERS = 5
+CACHE_DIR = Path("output/cache/classify")
 
 
 def _build_classification_prompt(post: XHSPost) -> str:
@@ -29,16 +33,22 @@ def _build_classification_prompt(post: XHSPost) -> str:
 
 def _parse_classification_response(raw: str, post: XHSPost) -> ClassifiedPost:
     """parse LLM JSON response into ClassifiedPost, with fallback"""
+    json_str = raw
+
+    # strip markdown code fences if present
+    m = re.search(r"```(?:json)?\s*([\s\S]*?)```", raw)
+    if m:
+        json_str = m.group(1).strip()
+
     try:
-        # try to extract JSON from response
-        json_start = raw.find("{")
-        json_end = raw.rfind("}") + 1
+        json_start = json_str.find("{")
+        json_end = json_str.rfind("}") + 1
         if json_start >= 0 and json_end > json_start:
-            data = json.loads(raw[json_start:json_end])
+            data = json.loads(json_str[json_start:json_end])
         else:
-            raise ValueError("No JSON found in response")
+            raise ValueError("No JSON found")
     except (json.JSONDecodeError, ValueError):
-        log.warning("Failed to parse LLM JSON, using fallback")
+        log.warning("Failed to parse LLM JSON, raw preview: %s", raw[:200])
         return _fallback_classify(post, raw)
 
     return ClassifiedPost(
@@ -96,15 +106,36 @@ def classify_post(
         )
         return _fallback_classify(post)
 
-    base_url = api_base or "https://api.deepseek.com/v1"
-    key = api_key or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
-    model_name = model or "deepseek-chat"
+    cfg = get_config()
+    base_url = api_base or cfg.api_base_url
+    key = api_key or cfg.api_key
+    model_name = model or cfg.api_model
 
     if not key:
         log.error("No API key configured")
         return _fallback_classify(post)
 
     prompt = _build_classification_prompt(post)
+    content_hash = hashlib.sha256(prompt.encode()).hexdigest()
+    cache_file = CACHE_DIR / f"{content_hash}.json"
+
+    if cache_file.exists() and key:
+        try:
+            cached = json.loads(cache_file.read_text(encoding="utf-8"))
+            result = ClassifiedPost(
+                post=post,
+                category=cached.get("category", "未分类"),
+                sub_category=cached.get("sub_category", ""),
+                summary=cached.get("summary", ""),
+                keywords=cached.get("keywords", []),
+                entities=cached.get("entities", []),
+                sentiment=cached.get("sentiment", "neutral"),
+                quality_score=float(cached.get("quality_score", 0)),
+            )
+            log.info("Classify cache hit for %s → %s", post.post_id, result.category)
+            return result
+        except Exception:
+            pass  # corrupt cache, re-fetch
 
     try:
         client = OpenAI(api_key=key, base_url=base_url)
@@ -118,10 +149,33 @@ def classify_post(
                 {"role": "user", "content": prompt},
             ],
             temperature=0,
-            max_tokens=800,
+            max_tokens=2000,
         )
-        raw = response.choices[0].message.content or ""
+        msg = response.choices[0].message
+        raw = msg.content or ""
+        # If reasoning model consumed all tokens on thinking, grab reasoning content
+        if not raw.strip():
+            reasoning = getattr(msg, "reasoning_content", None) or ""
+            if reasoning:
+                raw = reasoning
+                log.info("Using reasoning_content as fallback (%d chars)", len(reasoning))
         result = _parse_classification_response(raw, post)
+
+        # write cache
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache_file.write_text(
+            json.dumps({
+                "category": result.category,
+                "sub_category": result.sub_category,
+                "summary": result.summary,
+                "keywords": result.keywords,
+                "entities": result.entities,
+                "sentiment": result.sentiment,
+                "quality_score": result.quality_score,
+            }, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
         log.info(
             "Classified %s → %s/%s (%.1f)",
             post.post_id,

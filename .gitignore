@@ -1,0 +1,12 @@
+.env
+output/cache/
+output/checkpoint_scrape.json
+output/chroma_db/
+output/xhs_storage.json
+output/mcp_server.log
+output/run.log
+output/search_results.json
+output/scraped_posts.json
+output/classified_posts.json
+__pycache__/
+*.pyc
