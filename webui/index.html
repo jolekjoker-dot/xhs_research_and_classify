@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>XHS Knowledge Base</title>
+<script src="https://cdn.bootcdn.net/ajax/libs/marked/12.0.0/marked.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap');
 
@@ -117,8 +118,18 @@
   /* ── QA ── */
   .answer-box {
     background: #111620; border: 1px solid #1e2433; border-radius: 10px;
-    padding: 20px 22px; line-height: 1.75; font-size: 14px; white-space: pre-wrap;
+    padding: 20px 22px; line-height: 1.75; font-size: 14px;
   }
+  .answer-box h1, .answer-box h2, .answer-box h3 { color: #e4e7ee; margin: 16px 0 8px; }
+  .answer-box h1 { font-size: 18px; } .answer-box h2 { font-size: 16px; } .answer-box h3 { font-size: 14px; }
+  .answer-box p { margin: 6px 0; }
+  .answer-box ul, .answer-box ol { padding-left: 20px; margin: 6px 0; }
+  .answer-box li { margin: 2px 0; }
+  .answer-box strong { color: #e4e7ee; }
+  .answer-box code { background: #1a1d2a; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .answer-box pre { background: #0a0c12; padding: 12px; border-radius: 8px; overflow-x: auto; }
+  .answer-box blockquote { border-left: 3px solid #5470c6; padding-left: 12px; color: #8892a4; margin: 8px 0; }
+  .answer-box a { color: #73a0de; }
   .sources {
     margin-top: 14px; font-size: 12px; color: #6b7280;
     background: rgba(84,112,198,0.05); border: 1px solid #1e2433;
@@ -134,7 +145,7 @@
   }
   .img-card {
     background: #111620; border: 1px solid #1e2433; border-radius: 10px;
-    overflow: hidden; transition: all 0.2s ease;
+    overflow: hidden; transition: all 0.2s ease; cursor: pointer;
   }
   .img-card:hover { border-color: #3d4a63; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
   .img-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
@@ -164,6 +175,13 @@
     font-size: 12.5px; color: #91cc75; max-height: 320px; overflow-y: auto;
     white-space: pre-wrap; margin-top: 12px; line-height: 1.6;
   }
+
+  /* ── Lightbox ── */
+  .lightbox { display:none; position:fixed; top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:200;justify-content:center;align-items:center;cursor:pointer; }
+  .lightbox.show { display:flex; }
+  .lightbox img { max-width:92vw; max-height:92vh; border-radius:8px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
+  .lightbox .close { position:absolute;top:16px;right:24px;color:#aaa;font-size:32px;cursor:pointer; }
+  .lightbox .close:hover { color:#fff; }
 
   /* ── Graph ── */
   #tab-graph { padding: 0; max-width: none; }
@@ -222,6 +240,12 @@
   <div id="img-result"></div>
 </div>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -271,7 +295,10 @@ async function doAsk() {
   el.innerHTML = '<div class="loading">思考中...</div>';
   try {
     const data = await api('ask', {question: q, top_k: 5});
-    let html = '<div class="answer-box">' + data.answer + '</div>';
+    let answerHtml = typeof marked !== 'undefined'
+      ? marked.parse(data.answer)
+      : data.answer.replace(/</g,'&lt;').replace(/\n/g,'<br>');
+    let html = '<div class="answer-box">' + answerHtml + '</div>';
     if (data.sources.length) {
       html += '<div class="sources">📄 引用来源: ';
       html += data.sources.map(s => `<span>${s.title}</span> (${(s.score*100).toFixed(0)}%)`).join(' &nbsp;·&nbsp; ');
@@ -283,6 +310,15 @@ async function doAsk() {
   }
 }
 
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('show');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
 async function doImgSearch() {
   const q = document.getElementById('img-query').value.trim();
   if (!q) return;
@@ -292,8 +328,9 @@ async function doImgSearch() {
     const data = await api('search-images', {query: q, top_k: 10});
     let html = '<div class="img-grid">';
     data.results.forEach(r => {
-      html += `<div class="img-card">
-        <img src="/images/${r.image_path.split('/').pop()}" alt="${r.post_title||''}" loading="lazy"
+      const imgSrc = '/images/' + r.image_path.split('/').pop();
+      html += `<div class="img-card" onclick="openLightbox('${imgSrc}')">
+        <img src="${imgSrc}" alt="${r.post_title||''}" loading="lazy"
              onerror="this.style.background='#1a1d2a';this.style.height='150px'">
         <div class="info">
           <h4>${(r.post_title||'').substring(0,40)}</h4>

@@ -41,7 +41,7 @@ class APIHandler(SimpleHTTPRequestHandler):
             self.path = "/output/knowledge_base/graph_viz.json"
             super().do_GET()
         elif parsed.path.startswith("/images/"):
-            self.path = "/output/knowledge_base/" + parsed.path
+            self.path = "/output/knowledge_base" + parsed.path
             super().do_GET()
         else:
             super().do_GET()
