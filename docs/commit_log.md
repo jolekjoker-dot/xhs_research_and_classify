@@ -6,6 +6,56 @@
 
 ## 2026-05-22
 
+### `2b38c62` feat: P9 — search method dropdown (5 methods with labels)
+
+搜索和问答新增检索方式下拉框，可选：关键词/语义/RRF/RRF+重排/语义+重排，各有标注。
+
+**影响文件**：`webui/{server,index}.py`、`src/kb_agent/qa.py`、`docs/`
+
+**回退**：`git reset --hard 2b38c62~1`
+
+---
+
+### `e449618` fix: move pipeline section below project intro
+
+将"抓取小红书"移到左栏介绍下方，修复白底卡片样式。
+
+**回退**：`git reset --hard e449618~1`
+
+---
+
+### `602cc98` feat: Web UI light theme + home page split layout
+
+浅色主题 + 对角条纹背景 + 主页左右分栏。
+
+**回退**：`git reset --hard 602cc98~1`
+
+---
+
+### `5db403e` chore: snapshot — Web UI, reclassify fix, docs updates
+
+全量快照，含多个未提交修改。
+
+**回退**：`git reset --hard 5db403e~1`
+
+---
+
+### `30ba759` feat: Web UI — local MD document viewer + lightbox fix
+
+搜索结果点击查看本地 MD 文档（摘要/正文/图片文字/关键信息），修复灯箱关闭问题。
+
+**回退**：`git reset --hard 30ba759~1`
+
+---
+
+### `2ba09c2` feat: Web UI polish — markdown rendering + image lightbox
+
+marked.js 渲染 RAG 答案 Markdown，图片点击放大灯箱。
+
+**回退**：`git reset --hard 2ba09c2~1`
+
+---
+
 ### `cda67a1` feat: P8 — Web UI (4-tab layout: search, QA, graph, image search)
 
 **改动范围**：Web UI 可视化界面（3 个文件）
