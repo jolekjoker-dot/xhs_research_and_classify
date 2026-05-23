@@ -6,6 +6,16 @@
 
 ## 2026-05-22
 
+### `d0106f2` feat: P7 — RAG QA system (search + answer + sources)
+
+**改动范围**：RAG 问答（5 个文件）
+
+**影响文件**：`src/kb_agent/qa.py`（新增）、`src/cli.py`、`mcp_server/xhs_server.py`、`docs/`
+
+**回退**：`git reset --hard d0106f2~1`
+
+---
+
 ### `d6f437c` feat: P5 — text-to-image search
 
 **改动范围**：文搜图功能（8 个文件）
