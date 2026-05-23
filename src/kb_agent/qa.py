@@ -30,7 +30,7 @@ QA_USER_TEMPLATE = """## 知识库内容
 
 
 def _read_md_content(path_str: str, max_chars: int = 2000) -> str:
-    """read full content from a knowledge base MD file, skipping metadata sections"""
+    """read content from a KB MD file, extracting only real body + OCR text"""
     try:
         p = Path(path_str)
         if not p.exists():
@@ -43,18 +43,43 @@ def _read_md_content(path_str: str, max_chars: int = 2000) -> str:
             if end > 0:
                 text = text[end + 3:]
 
-        # Remove metadata sections at the end: 图片, 关键信息, 原文链接
-        for stop in ["## 图片", "## 关键信息", "## 原文链接"]:
-            idx = text.find(stop)
-            if idx > 0:
-                text = text[:idx]
+        # Extract only first occurrence of each real content section
+        parts = []
 
-        # remove image markdown references
-        text = re.sub(r"!\[.*?\]\([^)]+\)", "", text)
-        # collapse extra whitespace
-        text = re.sub(r"\n{3,}", "\n\n", text).strip()
+        # 摘要
+        idx = text.find("## 摘要")
+        if idx >= 0:
+            chunk = text[idx + len("## 摘要"):]
+            end_idx = chunk.find("## ")
+            if end_idx > 0:
+                chunk = chunk[:end_idx]
+            parts.append("## 摘要\n" + chunk.strip())
 
-        return text[:max_chars]
+        # 正文 (first occurrence before 图片 section)
+        idx = text.find("## 正文")
+        if idx >= 0:
+            chunk = text[idx + len("## 正文"):]
+            for stop in ["## 图片", "## 关键信息", "## 原文链接", "## 摘要"]:
+                end_idx = chunk.find(stop)
+                if end_idx > 0:
+                    chunk = chunk[:end_idx]
+            parts.append("## 正文\n" + chunk.strip())
+
+        # 图片提取文字
+        idx = text.find("## 图片提取文字")
+        if idx >= 0:
+            chunk = text[idx + len("## 图片提取文字"):]
+            end_idx = chunk.find("## 图片")
+            if end_idx > 0:
+                chunk = chunk[:end_idx]
+            parts.append("## 图片提取文字\n" + chunk.strip())
+
+        content = "\n\n".join(parts) if parts else text.strip()
+        # remove image markdown
+        content = re.sub(r"!\[.*?\]\([^)]+\)", "", content)
+        content = re.sub(r"\n{3,}", "\n\n", content).strip()
+
+        return content[:max_chars]
     except Exception:
         return ""
 

@@ -130,3 +130,142 @@
 2026-05-19 16:55:58 | INFO    | xhs.run | START  | [5/5] Build knowledge base
 2026-05-19 16:55:58 | INFO    | xhs.run | END    | build — KB at output\knowledge_base
 2026-05-19 16:55:58 | INFO    | xhs.run | Workflow complete! Open output\knowledge_base/INDEX.md
+2026-05-22 19:08:48 | INFO    | xhs.run | START  | [1/4] Search: ['Agent面试']
+2026-05-22 19:09:52 | INFO    | xhs.run | END    | search — 0 results
+2026-05-22 19:09:52 | INFO    | xhs.run | START  | [2/4] Scrape: 0 urls, keyword=Agent面试
+2026-05-22 19:09:52 | INFO    | xhs.run | END    | scrape — 0 posts
+2026-05-22 19:09:52 | ERROR   | xhs.run | No posts scraped, aborting
+2026-05-22 19:15:09 | INFO    | xhs.run | START  | [1/4] Search: ['Agent面试']
+2026-05-22 19:15:29 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 19:15:29 | INFO    | xhs.run | START  | [2/4] Scrape: 3 urls, keyword=Agent面试
+2026-05-22 19:16:16 | INFO    | xhs.run | END    | scrape — 2 posts
+2026-05-22 19:16:16 | INFO    | xhs.run | START  | [3/5] Format: 2 posts (workers=5)
+2026-05-22 19:16:16 | INFO    | xhs.run | END    | format — 2 done
+2026-05-22 19:16:16 | INFO    | xhs.run | START  | [4/5] Classify: 2 posts (workers=5)
+2026-05-22 19:16:16 | INFO    | xhs.run | END    | classify — 2 done
+2026-05-22 19:16:16 | INFO    | xhs.run | START  | [5/5] Build knowledge base
+2026-05-22 19:16:16 | INFO    | xhs.run | END    | build — KB at output\knowledge_base
+2026-05-22 19:16:16 | INFO    | xhs.run | Workflow complete! Open output\knowledge_base/INDEX.md
+2026-05-22 21:04:34 | INFO    | xhs.run | START  | [1/5] Search: ['Agent面试']
+2026-05-22 21:04:40 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 21:06:28 | INFO    | xhs.run | START  | [1/5] Search: ['Agent面试']
+2026-05-22 21:06:34 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 21:06:34 | INFO    | xhs.run | [2/5] Pipeline: scrape(2 workers) ⇢ format(5 workers) ⇢ classify(5 workers)
+2026-05-22 21:06:34 | INFO    | xhs.run | Processing 3 urls...
+2026-05-22 21:06:35 | ERROR   | xhs.run | Unexpected scrape error: https://www.xiaohongshu.com/explore/6a0c68fb000000003700fdc9
+Traceback (most recent call last):
+  File "D:\software\work\trae\trae_project\workflow\find_knowledge\src\cli.py", line 259, in cmd_run
+    post = sf.result()
+           ^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\trae\trae_project\workflow\find_knowledge\src\scrape\scraper.py", line 438, in scrape_post
+    context = pw.chromium.launch_persistent_context(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\sync_api\_generated.py", line 15419, in launch_persistent_context
+    self._sync(
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_browser_type.py", line 166, in launch_persistent_context
+    result = await self._channel.send_return_as_dict(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_connection.py", line 83, in send_return_as_dict
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+<launching> C:\Program Files\Google\Chrome\Application\chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --user-data-dir=C:\Users\jojo\.xhs_browser_profile --remote-debugging-pipe about:blank
+<launched> pid=129112
+Call log:
+  - <launching> C:\Program Files\Google\Chrome\Application\chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --user-data-dir=C:\Users\jojo\.xhs_browser_profile --remote-debugging-pipe about:blank
+  - <launched> pid=129112
+  - [pid=129112] <gracefully close start>
+  - [pid=129112] <kill>
+  - [pid=129112] <will force kill>
+  - [pid=129112] taskkill stderr: ����: û���ҵ����� "129112"��
+  - [pid=129112] <process did exit: exitCode=21, signal=null>
+  - [pid=129112] starting temporary directories cleanup
+  - [pid=129112] finished temporary directories cleanup
+  - [pid=129112] <gracefully close end>
+
+2026-05-22 21:06:37 | ERROR   | xhs.run | Unexpected scrape error: https://www.xiaohongshu.com/explore/6a0c7f4900000000350289a5
+Traceback (most recent call last):
+  File "D:\software\work\trae\trae_project\workflow\find_knowledge\src\cli.py", line 259, in cmd_run
+    post = sf.result()
+           ^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "D:\software\work\miniconda\miniconda\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\trae\trae_project\workflow\find_knowledge\src\scrape\scraper.py", line 438, in scrape_post
+    context = pw.chromium.launch_persistent_context(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\sync_api\_generated.py", line 15419, in launch_persistent_context
+    self._sync(
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_browser_type.py", line 166, in launch_persistent_context
+    result = await self._channel.send_return_as_dict(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_connection.py", line 83, in send_return_as_dict
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\software\work\miniconda\miniconda\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: BrowserType.launch_persistent_context: Target page, context or browser has been closed
+Browser logs:
+
+<launching> C:\Program Files\Google\Chrome\Application\chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --user-data-dir=C:\Users\jojo\.xhs_browser_profile --remote-debugging-pipe about:blank
+<launched> pid=114128
+Call log:
+  - <launching> C:\Program Files\Google\Chrome\Application\chrome.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --disable-blink-features=AutomationControlled --no-sandbox --user-data-dir=C:\Users\jojo\.xhs_browser_profile --remote-debugging-pipe about:blank
+  - <launched> pid=114128
+  - [pid=114128] <gracefully close start>
+  - [pid=114128] <kill>
+  - [pid=114128] <will force kill>
+  - [pid=114128] taskkill stderr: ����: û���ҵ����� "114128"��
+  - [pid=114128] <process did exit: exitCode=21, signal=null>
+  - [pid=114128] starting temporary directories cleanup
+  - [pid=114128] finished temporary directories cleanup
+  - [pid=114128] <gracefully close end>
+
+2026-05-22 21:07:18 | INFO    | xhs.run | Pipeline complete: 1 posts in 44.6s
+2026-05-22 21:07:18 | INFO    | xhs.run | START  | [4/5] Build knowledge base
+2026-05-22 21:07:18 | INFO    | xhs.run | END    | build — KB at output\knowledge_base
+2026-05-22 21:07:18 | INFO    | xhs.run | START  | [5/5] Build knowledge graph
+2026-05-22 21:07:18 | INFO    | xhs.run | END    | graph — Graph exported → output\knowledge_base\graph_viz.json
+2026-05-22 21:07:18 | INFO    | xhs.run | Workflow complete! Open output\knowledge_base/INDEX.md or output\knowledge_base/graph.html
+2026-05-22 21:08:38 | INFO    | xhs.run | START  | [1/5] Search: ['Agent面试']
+2026-05-22 21:08:43 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 21:08:43 | INFO    | xhs.run | [2/5] Pipeline: scrape(2 workers) ⇢ format(5 workers) ⇢ classify(5 workers)
+2026-05-22 21:08:43 | INFO    | xhs.run | Processing 3 urls...
+2026-05-22 21:09:28 | ERROR   | xhs.run | No posts scraped, aborting
+2026-05-22 21:11:23 | INFO    | xhs.run | START  | [1/5] Search: ['Agent面试']
+2026-05-22 21:11:29 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 21:11:29 | INFO    | xhs.run | [2/5] Pipeline: scrape(1 workers) ⇢ format(5 workers) ⇢ classify(5 workers)
+2026-05-22 21:11:29 | INFO    | xhs.run | Processing 3 urls...
+2026-05-22 21:13:07 | INFO    | xhs.run | START  | [1/5] Search: ['Agent面试']
+2026-05-22 21:13:13 | INFO    | xhs.run | END    | search — 3 results
+2026-05-22 21:13:13 | INFO    | xhs.run | [2/5] Pipeline: scrape(1 workers) ⇢ format(5 workers) ⇢ classify(5 workers)
+2026-05-22 21:13:13 | INFO    | xhs.run | Processing 3 urls...
+2026-05-22 21:14:09 | INFO    | xhs.run | Pipeline complete: 3 posts in 55.7s
+2026-05-22 21:14:09 | INFO    | xhs.run | START  | [4/5] Build knowledge base
+2026-05-22 21:14:09 | INFO    | xhs.run | END    | build — KB at output\knowledge_base
+2026-05-22 21:14:09 | INFO    | xhs.run | START  | [5/5] Build knowledge graph
+2026-05-22 21:14:09 | INFO    | xhs.run | END    | graph — Graph exported → output\knowledge_base\graph_viz.json
+2026-05-22 21:14:09 | INFO    | xhs.run | Workflow complete! Open output\knowledge_base/INDEX.md or output\knowledge_base/graph.html

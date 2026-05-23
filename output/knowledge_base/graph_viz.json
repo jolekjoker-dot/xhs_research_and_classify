@@ -1,0 +1,3683 @@
+{
+  "nodes": [
+    {
+      "id": "69d51830",
+      "name": "20260407腾讯Agent应用开发一面",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[腾讯面试",
+      "name": "[腾讯面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Agent开发",
+      "name": "Agent开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大模型",
+      "name": "大模型",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面经",
+      "name": "面经",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:AI面试题",
+      "name": "AI面试题",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Python八股",
+      "name": "Python八股",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:GRPO",
+      "name": "GRPO",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:PPO",
+      "name": "PPO",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Qlora",
+      "name": "Qlora",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Claude Code]",
+      "name": "Claude Code]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69ad4bb9",
+      "name": "2026大模型Agent面试全攻略（上）",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[Agent",
+      "name": "[Agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试",
+      "name": "面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:ReAct",
+      "name": "ReAct",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:工作流",
+      "name": "工作流",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:自主Agent",
+      "name": "自主Agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:长期记忆",
+      "name": "长期记忆",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:编排者-执行者",
+      "name": "编排者-执行者",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:反思",
+      "name": "反思",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:自我纠正]",
+      "name": "自我纠正]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "699d5d16",
+      "name": "agent 开发只会 python 不学 java 行不行",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[Agent开发",
+      "name": "[Agent开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:后端开发",
+      "name": "后端开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Python",
+      "name": "Python",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Java",
+      "name": "Java",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Go",
+      "name": "Go",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:技术栈",
+      "name": "技术栈",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试准备]",
+      "name": "面试准备]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69ef3c9e",
+      "name": "Agent暑期实习面经",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:暑期实习",
+      "name": "暑期实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:multi-agent",
+      "name": "multi-agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:LangGraph",
+      "name": "LangGraph",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:意图识别",
+      "name": "意图识别",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试经验]",
+      "name": "面试经验]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69a3163e",
+      "name": "不建议 agent 开发只会 python",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:后端架构",
+      "name": "后端架构",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:工程能力",
+      "name": "工程能力",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:就业市场",
+      "name": "就业市场",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:系统设计",
+      "name": "系统设计",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:稳定性]",
+      "name": "稳定性]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69c39f58",
+      "name": "分享一下我面试Agent岗位时被问到的问题……",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:Agent面试",
+      "name": "Agent面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:人工智能",
+      "name": "人工智能",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:智能体",
+      "name": "智能体",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试技巧",
+      "name": "面试技巧",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Plan-and-Execute",
+      "name": "Plan-and-Execute",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:工具调用",
+      "name": "工具调用",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:记忆管理",
+      "name": "记忆管理",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:多智能体协作]",
+      "name": "多智能体协作]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69ec2ba1",
+      "name": "大模型八股文，5天背完拿offer",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[大模型",
+      "name": "[大模型",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:LLM",
+      "name": "LLM",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试题",
+      "name": "面试题",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:八股文",
+      "name": "八股文",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Transformer",
+      "name": "Transformer",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:微调",
+      "name": "微调",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:AI",
+      "name": "AI",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:机器学习]",
+      "name": "机器学习]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69ba757c",
+      "name": "字节 大模型应用开发 二面面经",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[字节跳动",
+      "name": "[字节跳动",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大模型应用开发",
+      "name": "大模型应用开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:RAG",
+      "name": "RAG",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试问题",
+      "name": "面试问题",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:向量检索",
+      "name": "向量检索",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Agent",
+      "name": "Agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:异步编程",
+      "name": "异步编程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:多线程",
+      "name": "多线程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:JSON输出]",
+      "name": "JSON输出]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69b4daa5",
+      "name": "字节跳动Agent开发一面",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:self-attention",
+      "name": "self-attention",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Python多线程",
+      "name": "Python多线程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:GIL",
+      "name": "GIL",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:代码覆盖率",
+      "name": "代码覆盖率",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:岛屿最大面积]",
+      "name": "岛屿最大面积]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69b65422",
+      "name": "快手AI Agent开发一面",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[AI Agent",
+      "name": "[AI Agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:快手",
+      "name": "快手",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:检索",
+      "name": "检索",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Rerank",
+      "name": "Rerank",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:上下文工程",
+      "name": "上下文工程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:限流算法",
+      "name": "限流算法",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:数据库索引]",
+      "name": "数据库索引]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "697cd87d",
+      "name": "秋招以来的ai面经问题all",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[AI面试",
+      "name": "[AI面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Agent项目",
+      "name": "Agent项目",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:RAG系统",
+      "name": "RAG系统",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:MCP协议",
+      "name": "MCP协议",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Prompt工程",
+      "name": "Prompt工程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:秋招面经",
+      "name": "秋招面经",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:智能体]",
+      "name": "智能体]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69db6240",
+      "name": "腾讯大模型应用开发 二面",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[腾讯",
+      "name": "[腾讯",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:应用开发",
+      "name": "应用开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:二面",
+      "name": "二面",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:agent",
+      "name": "agent",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:实习",
+      "name": "实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:coding agent]",
+      "name": "coding agent]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69fc5a35",
+      "name": "近三个月大厂Agent实习面试都在问什么",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[Agent面试",
+      "name": "[Agent面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Embedding",
+      "name": "Embedding",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大厂实习",
+      "name": "大厂实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:AI]",
+      "name": "AI]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69fb5130",
+      "name": "近期大厂大模型岗位面经总结（2026.3-4）",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[大模型面试",
+      "name": "[大模型面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:RL对齐",
+      "name": "RL对齐",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:SFT",
+      "name": "SFT",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:LoRA",
+      "name": "LoRA",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:知识蒸馏",
+      "name": "知识蒸馏",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:MoE",
+      "name": "MoE",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试真题",
+      "name": "面试真题",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大厂]",
+      "name": "大厂]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69b41390",
+      "name": "阿里大模型Agent面试，面试完人傻了。。。",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:阿里",
+      "name": "阿里",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:提示工程",
+      "name": "提示工程",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:技术模块]",
+      "name": "技术模块]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69dbbf4b",
+      "name": "阿里淘天暑期实习Agent算法岗一面",
+      "category": "技术编程",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#5470c6"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[Attention",
+      "name": "[Attention",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:SFT数据清洗",
+      "name": "SFT数据清洗",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:DPO训练",
+      "name": "DPO训练",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:梯度爆炸",
+      "name": "梯度爆炸",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Agent算法",
+      "name": "Agent算法",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试经验",
+      "name": "面试经验",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:淘天集团]",
+      "name": "淘天集团]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:[面经",
+      "name": "[面经",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:算法",
+      "name": "算法",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:深度学习",
+      "name": "深度学习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面试题]",
+      "name": "面试题]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "67f38575",
+      "name": "5月大模型面试必问八股文，背完通过率98%",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:大模型应用",
+      "name": "大模型应用",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:算法]",
+      "name": "算法]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:[暑期实习",
+      "name": "[暑期实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:暑期实习面经",
+      "name": "暑期实习面经",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:面经]",
+      "name": "面经]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69f9e94a",
+      "name": "复盘两下",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[无人在意的角落",
+      "name": "[无人在意的角落",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:轻轻地碎了",
+      "name": "轻轻地碎了",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:还没开始就结束了",
+      "name": "还没开始就结束了",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:字节跳动]",
+      "name": "字节跳动]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:多模态人工智能",
+      "name": "多模态人工智能",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:嵌入式开发",
+      "name": "嵌入式开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大模型面试",
+      "name": "大模型面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大模型开发]",
+      "name": "大模型开发]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69de2751",
+      "name": "字节AI Agent面试经验（已Offer）",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[互联网大厂",
+      "name": "[互联网大厂",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69e5db62",
+      "name": "字节AI Agent面试经验（已Offer）",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "69aa8465",
+      "name": "字节春招 26届后端开发Agent一面",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[计算机",
+      "name": "[计算机",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:春招",
+      "name": "春招",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:互联网大厂",
+      "name": "互联网大厂",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:26届]",
+      "name": "26届]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "6a00a774",
+      "name": "淘天-ai应用开发-二面",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:后端开发]",
+      "name": "后端开发]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "695f570a",
+      "name": "社招复盘（一）",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:社招",
+      "name": "社招",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:大模型应用]",
+      "name": "大模型应用]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69d35134",
+      "name": "蚂蚁agent应用暑期实习一面",
+      "category": "未分类",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#91cc75"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:面试技巧]",
+      "name": "面试技巧]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69feace6",
+      "name": "大模型应用/Agent开发简历求批，刚投两天",
+      "category": "职业发展",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[找实习",
+      "name": "[找实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:求职",
+      "name": "求职",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:AI应用开发实习",
+      "name": "AI应用开发实习",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:agent开发",
+      "name": "agent开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:ai应用",
+      "name": "ai应用",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:高分简历怎么写",
+      "name": "高分简历怎么写",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:简历模板]",
+      "name": "简历模板]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "67f34d0a",
+      "name": "我是如何准备大模型算法岗面试的？",
+      "category": "职业发展",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:算法岗",
+      "name": "算法岗",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:技术报告",
+      "name": "技术报告",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:手撕代码",
+      "name": "手撕代码",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:实习]",
+      "name": "实习]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69b3d982",
+      "name": "把字节数据分析八股文370题刷完，你就🐮",
+      "category": "职业发展",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:[数据分析",
+      "name": "[数据分析",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:字节跳动",
+      "name": "字节跳动",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:业务面试",
+      "name": "业务面试",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:SQL",
+      "name": "SQL",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:Excel]",
+      "name": "Excel]",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69cbee68",
+      "name": "暑期腾讯一面面经",
+      "category": "职业发展",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:AI应用开发",
+      "name": "AI应用开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "69e18daf",
+      "name": "非常有收获的一次面试",
+      "category": "职业发展",
+      "score": 0.0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 30
+    },
+    {
+      "id": "kw:实习生",
+      "name": "实习生",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    },
+    {
+      "id": "kw:RPA开发",
+      "name": "RPA开发",
+      "category": "关键词",
+      "score": 0,
+      "itemStyle": {
+        "color": "#fac858"
+      },
+      "symbolSize": 16,
+      "label": {
+        "show": true,
+        "fontSize": 10
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "69d51830",
+      "target": "kw:[腾讯面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:Agent开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:AI面试题",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:Python八股",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:GRPO",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:PPO",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:Qlora",
+      "type": "keyword"
+    },
+    {
+      "source": "69d51830",
+      "target": "kw:Claude Code]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:[Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:ReAct",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:工作流",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:自主Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:长期记忆",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:编排者-执行者",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:反思",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:自我纠正]",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:[Agent开发",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:后端开发",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:Python",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:Java",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:Go",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:技术栈",
+      "type": "keyword"
+    },
+    {
+      "source": "699d5d16",
+      "target": "kw:面试准备]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:[Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:暑期实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:multi-agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:ReAct",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:LangGraph",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:意图识别",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:面试经验]",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:[Agent开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:后端架构",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:Python",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:Java",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:Go",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:工程能力",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:就业市场",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:系统设计",
+      "type": "keyword"
+    },
+    {
+      "source": "69a3163e",
+      "target": "kw:稳定性]",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:[Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:Agent面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:人工智能",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:智能体",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:面试技巧",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:ReAct",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:Plan-and-Execute",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:工具调用",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:记忆管理",
+      "type": "keyword"
+    },
+    {
+      "source": "69c39f58",
+      "target": "kw:多智能体协作]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:[大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:LLM",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:面试题",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:八股文",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:Transformer",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:微调",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:AI",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:机器学习]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:[字节跳动",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:大模型应用开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:RAG",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:面试问题",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:向量检索",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:异步编程",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:多线程",
+      "type": "keyword"
+    },
+    {
+      "source": "69ba757c",
+      "target": "kw:JSON输出]",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:[字节跳动",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:Agent开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:LLM",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:self-attention",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:Python多线程",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:GIL",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:代码覆盖率",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:岛屿最大面积]",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:[AI Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:RAG",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:快手",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:检索",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:Rerank",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:上下文工程",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:限流算法",
+      "type": "keyword"
+    },
+    {
+      "source": "69b65422",
+      "target": "kw:数据库索引]",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:[AI面试",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:Agent项目",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:RAG系统",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:MCP协议",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:Prompt工程",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:秋招面经",
+      "type": "keyword"
+    },
+    {
+      "source": "697cd87d",
+      "target": "kw:智能体]",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:[腾讯",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:应用开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:二面",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:AI",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:coding agent]",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:[Agent面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:RAG",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:ReAct",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:工具调用",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:上下文工程",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:向量检索",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:Embedding",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:面试技巧",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:大厂实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:AI]",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:[大模型面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:RL对齐",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:SFT",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:LoRA",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:知识蒸馏",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:MoE",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:面试真题",
+      "type": "keyword"
+    },
+    {
+      "source": "69fb5130",
+      "target": "kw:大厂]",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:[大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:阿里",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:微调",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:提示工程",
+      "type": "keyword"
+    },
+    {
+      "source": "69b41390",
+      "target": "kw:技术模块]",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:[Attention",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:SFT数据清洗",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:RAG",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:DPO训练",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:梯度爆炸",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:Agent算法",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:面试经验",
+      "type": "keyword"
+    },
+    {
+      "source": "69dbbf4b",
+      "target": "kw:淘天集团]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:[面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:算法",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:深度学习",
+      "type": "keyword"
+    },
+    {
+      "source": "69ad4bb9",
+      "target": "kw:面试题]",
+      "type": "keyword"
+    },
+    {
+      "source": "67f38575",
+      "target": "kw:[大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "67f38575",
+      "target": "kw:大模型应用",
+      "type": "keyword"
+    },
+    {
+      "source": "67f38575",
+      "target": "kw:LLM",
+      "type": "keyword"
+    },
+    {
+      "source": "67f38575",
+      "target": "kw:人工智能",
+      "type": "keyword"
+    },
+    {
+      "source": "67f38575",
+      "target": "kw:算法]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:[暑期实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:暑期实习面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69ef3c9e",
+      "target": "kw:面经]",
+      "type": "keyword"
+    },
+    {
+      "source": "69f9e94a",
+      "target": "kw:[无人在意的角落",
+      "type": "keyword"
+    },
+    {
+      "source": "69f9e94a",
+      "target": "kw:轻轻地碎了",
+      "type": "keyword"
+    },
+    {
+      "source": "69f9e94a",
+      "target": "kw:还没开始就结束了",
+      "type": "keyword"
+    },
+    {
+      "source": "69f9e94a",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69f9e94a",
+      "target": "kw:字节跳动]",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:[大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:多模态人工智能",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:嵌入式开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:大模型面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69ec2ba1",
+      "target": "kw:大模型开发]",
+      "type": "keyword"
+    },
+    {
+      "source": "69de2751",
+      "target": "kw:[互联网大厂",
+      "type": "keyword"
+    },
+    {
+      "source": "69de2751",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69de2751",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69de2751",
+      "target": "kw:Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69de2751",
+      "target": "kw:字节跳动]",
+      "type": "keyword"
+    },
+    {
+      "source": "69e5db62",
+      "target": "kw:[互联网大厂",
+      "type": "keyword"
+    },
+    {
+      "source": "69e5db62",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69e5db62",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69e5db62",
+      "target": "kw:Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69e5db62",
+      "target": "kw:字节跳动]",
+      "type": "keyword"
+    },
+    {
+      "source": "69aa8465",
+      "target": "kw:[计算机",
+      "type": "keyword"
+    },
+    {
+      "source": "69aa8465",
+      "target": "kw:春招",
+      "type": "keyword"
+    },
+    {
+      "source": "69aa8465",
+      "target": "kw:后端开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69aa8465",
+      "target": "kw:互联网大厂",
+      "type": "keyword"
+    },
+    {
+      "source": "69aa8465",
+      "target": "kw:26届]",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:[字节跳动",
+      "type": "keyword"
+    },
+    {
+      "source": "69b4daa5",
+      "target": "kw:面经]",
+      "type": "keyword"
+    },
+    {
+      "source": "6a00a774",
+      "target": "kw:[互联网大厂",
+      "type": "keyword"
+    },
+    {
+      "source": "6a00a774",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "6a00a774",
+      "target": "kw:后端开发]",
+      "type": "keyword"
+    },
+    {
+      "source": "695f570a",
+      "target": "kw:[面经",
+      "type": "keyword"
+    },
+    {
+      "source": "695f570a",
+      "target": "kw:面试问题",
+      "type": "keyword"
+    },
+    {
+      "source": "695f570a",
+      "target": "kw:社招",
+      "type": "keyword"
+    },
+    {
+      "source": "695f570a",
+      "target": "kw:agent",
+      "type": "keyword"
+    },
+    {
+      "source": "695f570a",
+      "target": "kw:大模型应用]",
+      "type": "keyword"
+    },
+    {
+      "source": "69d35134",
+      "target": "kw:[面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69d35134",
+      "target": "kw:后端开发]",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:[计算机",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:Agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69fc5a35",
+      "target": "kw:面试技巧]",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:[找实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:求职",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:AI应用开发实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:大模型应用",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:agent开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:ai应用",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:高分简历怎么写",
+      "type": "keyword"
+    },
+    {
+      "source": "69feace6",
+      "target": "kw:简历模板]",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:[大模型面试",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:算法岗",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:技术报告",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:手撕代码",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:八股文",
+      "type": "keyword"
+    },
+    {
+      "source": "67f34d0a",
+      "target": "kw:实习]",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:[数据分析",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:字节跳动",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:八股文",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:求职",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:业务面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:Python",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:SQL",
+      "type": "keyword"
+    },
+    {
+      "source": "69b3d982",
+      "target": "kw:Excel]",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:[腾讯",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:暑期实习",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:AI应用开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:RAG",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:LLM",
+      "type": "keyword"
+    },
+    {
+      "source": "69cbee68",
+      "target": "kw:面试经验]",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:[腾讯",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:大模型",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:应用开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:二面",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:AI",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:agent",
+      "type": "keyword"
+    },
+    {
+      "source": "69db6240",
+      "target": "kw:实习]",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:[面经",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:Python",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:实习生",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:面试",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:RPA开发",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:求职",
+      "type": "keyword"
+    },
+    {
+      "source": "69e18daf",
+      "target": "kw:实习]",
+      "type": "keyword"
+    }
+  ]
+}
