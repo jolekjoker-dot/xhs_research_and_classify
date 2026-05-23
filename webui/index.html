@@ -169,6 +169,20 @@
   }
 
   /* ── Pipeline ── */
+  /* ── Doc viewer ── */
+  .doc-viewer { display:none; }
+  .doc-viewer.show { display:block; }
+  .doc-back { color:#73a0de; cursor:pointer; font-size:13px; margin-bottom:14px; display:inline-block; user-select:none; }
+  .doc-back:hover { color:#91b8f0; }
+  .doc-meta { font-size:12px; color:#5a6375; margin-bottom:16px; }
+  .doc-body { line-height:1.75; font-size:14px; }
+  .doc-body h1, .doc-body h2, .doc-body h3 { color:#e4e7ee; margin:16px 0 8px; }
+  .doc-body h1 { font-size:18px; } .doc-body h2 { font-size:15px; } .doc-body h3 { font-size:14px; }
+  .doc-body p { margin:6px 0; }
+  .doc-body ul, .doc-body ol { padding-left:20px; }
+  .doc-body strong { color:#e4e7ee; }
+  .doc-body a { color:#73a0de; }
+
   #pipeline-log {
     background: #0a0c12; border: 1px solid #1e2433; border-radius: 10px;
     padding: 16px 20px; font-family: "Cascadia Code", "Consolas", monospace;
@@ -205,6 +219,10 @@
     <button onclick="doSearch()">搜索</button>
   </div>
   <div id="search-result"></div>
+  <div id="doc-viewer" class="doc-viewer">
+    <span class="doc-back" onclick="closeDoc()">← 返回搜索结果</span>
+    <div id="doc-content"></div>
+  </div>
 
   <h3>抓取小红书</h3>
   <div class="row">
@@ -243,7 +261,7 @@
 <!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="close">&times;</span>
-  <img id="lightbox-img" src="" alt="">
+  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
 <script>
@@ -279,7 +297,7 @@ async function doSearch() {
           <span class="method-tag">${r.method}</span>
         </h4>
         <p>${(r.content||'').substring(0,200)}</p>
-        <div class="meta">${r.category || ''} ${r.url ? '· <a href="'+r.url+'" target="_blank">原文 &nearr;</a>' : ''}</div>
+        <div class="meta">${r.category || ''} &nbsp;·&nbsp; <a href="#" onclick="event.preventDefault();openDoc('${(r.path||'').replace(/\\/g,'/')}')">查看文档</a> ${r.url ? '· <a href="'+r.url+'" target="_blank">原文 &nearr;</a>' : ''}</div>
       </div>`;
     });
     el.innerHTML = html || '<p style="color:#6b7280;text-align:center;padding:32px">未找到结果</p>';
@@ -317,7 +335,27 @@ function openLightbox(src) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('show');
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+async function openDoc(path) {
+  const el = document.getElementById('doc-viewer');
+  const content = document.getElementById('doc-content');
+  el.classList.add('show');
+  document.getElementById('search-result').style.display = 'none';
+  content.innerHTML = '<div class="loading">加载文档...</div>';
+  try {
+    const resp = await fetch('/api/doc?path=' + encodeURIComponent(path));
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    const html = typeof marked !== 'undefined' ? marked.parse(data.content) : data.content;
+    content.innerHTML = `<div class="doc-body">${html}</div>`;
+  } catch (e) {
+    content.innerHTML = '<div class="error">加载失败: ' + e.message + '</div>';
+  }
+}
+function closeDoc() {
+  document.getElementById('doc-viewer').classList.remove('show');
+  document.getElementById('search-result').style.display = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeDoc(); } });
 
 async function doImgSearch() {
   const q = document.getElementById('img-query').value.trim();

@@ -71,6 +71,8 @@ class APIHandler(SimpleHTTPRequestHandler):
                 result = self._ask(qs)
             elif path == "/api/search-images":
                 result = self._search_images(qs)
+            elif path == "/api/doc":
+                result = self._doc(qs)
             else:
                 self._json({"error": "Unknown endpoint"}, 404)
                 return
@@ -149,6 +151,38 @@ class APIHandler(SimpleHTTPRequestHandler):
         all_results = search_batch([keyword], count_per=count, headless=True)
         total = sum(len(v) for v in all_results.values())
         return {"keyword": keyword, "count": count, "results_found": total}
+
+    def _doc(self, qs):
+        from urllib.parse import unquote
+        path = unquote(qs.get("path", [""])[0])
+        if not path:
+            return {"error": "missing path"}
+        # normalize path separators (frontend sends forward slashes)
+        path = path.replace("/", "\\")
+        p = PROJECT_ROOT / path
+        if not p.exists():
+            return {"error": f"file not found: {path}"}
+        # safety: ensure resolved path is within project
+        if not str(p.resolve()).startswith(str(PROJECT_ROOT.resolve())):
+            return {"error": "path outside project"}
+        text = p.read_text(encoding="utf-8")
+        if text.startswith("---"):
+            end = text.find("---", 3)
+            if end > 0:
+                text = text[end + 3:]
+        # Extract only: 摘要, 正文, 关键信息 sections
+        sections = []
+        for keyword in ["## 摘要", "## 正文", "## 图片提取文字", "## 关键信息"]:
+            idx = text.find(keyword)
+            if idx >= 0:
+                # extract from this heading to the next ## heading
+                chunk = text[idx:]
+                next_h2 = chunk.find("\n## ", len(keyword) + 1)
+                if next_h2 > 0:
+                    chunk = chunk[:next_h2]
+                sections.append(chunk.strip())
+        content = "\n\n".join(sections) if sections else text.strip()
+        return {"content": content, "path": path}
 
     # ── helpers ────────────────────────────────────────────
 

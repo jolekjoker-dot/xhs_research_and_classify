@@ -6,6 +6,16 @@
 
 ## 2026-05-22
 
+### `cda67a1` feat: P8 — Web UI (4-tab layout: search, QA, graph, image search)
+
+**改动范围**：Web UI 可视化界面（3 个文件）
+
+**影响文件**：`webui/server.py`（新增）、`webui/index.html`（新增）、`docs/`
+
+**回退**：`git reset --hard cda67a1~1`
+
+---
+
 ### `d0106f2` feat: P7 — RAG QA system (search + answer + sources)
 
 **改动范围**：RAG 问答（5 个文件）
