@@ -1,205 +1,185 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>XHS Knowledge Base</title>
 <script src="https://cdn.bootcdn.net/ajax/libs/marked/12.0.0/marked.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #0b0d14;
-    color: #c8cdd8;
-    min-height: 100vh;
-    line-height: 1.6;
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    background-attachment:fixed;
+    color:#334155;min-height:100vh;line-height:1.6;
+  }
+  body::before{
+    content:'';position:fixed;top:0;left:0;width:100%;height:100%;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(148,163,184,0.04) 40px, rgba(148,163,184,0.04) 42px
+    ),
+    repeating-linear-gradient(
+      -45deg, transparent, transparent 40px,
+      rgba(148,163,184,0.04) 40px, rgba(148,163,184,0.04) 42px
+    );
+    pointer-events:none;z-index:0;
   }
 
-  /* ── Nav ── */
-  nav {
-    display: flex;
-    gap: 4px;
-    padding: 8px 16px;
-    background: linear-gradient(180deg, #111620 0%, #0d1018 100%);
-    border-bottom: 1px solid #1e2433;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(12px);
+  nav{
+    display:flex;gap:4px;padding:10px 20px;
+    background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100;
   }
-  nav button {
-    padding: 10px 20px;
-    background: none;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    color: #6b7280;
-    font-size: 13.5px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    letter-spacing: 0.01em;
+  nav button{
+    padding:10px 20px;background:none;border:1px solid transparent;
+    border-radius:8px;color:#64748b;font-size:13.5px;font-weight:500;
+    cursor:pointer;transition:all .2s;letter-spacing:.01em;
   }
-  nav button:hover { color: #d1d5db; background: rgba(255,255,255,0.04); }
-  nav button.active {
-    color: #e8ecef;
-    background: rgba(84,112,198,0.12);
-    border-color: rgba(84,112,198,0.3);
-    box-shadow: 0 0 0 1px rgba(84,112,198,0.08);
+  nav button:hover{color:#334155;background:rgba(100,116,139,0.06)}
+  nav button.active{
+    color:#2563eb;background:rgba(37,99,235,0.06);
+    border-color:rgba(37,99,235,0.15);
   }
 
-  /* ── Tabs ── */
-  .tab { display: none; padding: 28px 24px; max-width: 900px; margin: 0 auto; }
-  .tab.active { display: block; }
-  h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: #e4e7ee; }
-  h3 { font-size: 15px; font-weight: 600; margin: 24px 0 12px; color: #d0d4dd; }
+  .tab{display:none;padding:28px 24px;max-width:1000px;margin:0 auto;position:relative;z-index:1}
+  .tab.active{display:block}
+  h2{font-size:20px;font-weight:600;margin-bottom:20px;color:#1e293b}
+  h3{font-size:15px;font-weight:600;margin:24px 0 12px;color:#334155}
 
-  /* ── Form elements ── */
-  input, button {
-    padding: 10px 16px;
-    border: 1px solid #262d3d;
-    border-radius: 8px;
-    background: #121620;
-    color: #d0d4dd;
-    font-size: 14px;
-    font-family: inherit;
-    transition: all 0.15s ease;
+  input,textarea,button{
+    padding:10px 16px;border:1px solid #cbd5e1;border-radius:8px;
+    background:#fff;color:#334155;font-size:14px;font-family:inherit;
+    transition:all .15s;
   }
-  input:focus { outline: none; border-color: #5470c6; box-shadow: 0 0 0 3px rgba(84,112,198,0.15); }
-  input::placeholder { color: #4a5060; }
-  button {
-    cursor: pointer;
-    background: #5470c6;
-    border-color: #5470c6;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.01em;
-    transition: all 0.15s ease;
+  input:focus,textarea:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+  input::placeholder{color:#94a3b8}
+  button{
+    cursor:pointer;background:#2563eb;border-color:#2563eb;
+    font-weight:600;color:#fff;letter-spacing:.01em;
   }
-  button:hover { background: #6580d4; border-color: #6580d4; }
-  button:active { transform: scale(0.98); }
-  button.secondary { background: #1e2433; border-color: #2d3548; color: #a0a8b8; }
-  button.secondary:hover { background: #262d3d; }
+  button:hover{background:#3b82f6}
+  button:active{transform:scale(.98)}
+  button.secondary{background:#f1f5f9;border-color:#cbd5e1;color:#475569}
+  button.secondary:hover{background:#e2e8f0}
 
-  .row { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
-  .row input { flex: 1; }
-  .row input[type="number"] { flex: 0; width: 72px; text-align: center; }
+  .row{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+  .row input{flex:1}
+  .row input[type="number"]{flex:0;width:72px;text-align:center}
+
+  /* ── Home split layout ── */
+  .home-split{display:flex;gap:32px;align-items:flex-start}
+  .home-intro{flex:1;min-width:0}
+  .home-intro .intro-card{
+    background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
+    border-radius:12px;padding:24px 28px;backdrop-filter:blur(8px);
+  }
+  .home-intro h1{font-size:22px;color:#1e293b;margin-bottom:12px}
+  .home-intro p{color:#64748b;font-size:14px;line-height:1.75;margin-bottom:8px}
+  .home-intro .features{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .home-intro .feat-tag{
+    background:rgba(37,99,235,0.06);color:#2563eb;
+    padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  }
+  .home-func{flex:1;min-width:0}
+  .home-func .func-block{
+    background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
+    border-radius:12px;padding:20px 24px;margin-bottom:16px;
+    backdrop-filter:blur(8px);
+  }
 
   /* ── Cards ── */
-  .result { margin-top: 20px; }
-  .card {
-    background: #111620;
-    border: 1px solid #1e2433;
-    border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 10px;
-    transition: border-color 0.15s ease;
+  .result{margin-top:20px}
+  .card{
+    background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
+    border-radius:10px;padding:14px 18px;margin-bottom:10px;
+    transition:border-color .15s;backdrop-filter:blur(8px);
   }
-  .card:hover { border-color: #2d3548; }
-  .card h4 { font-size: 14px; font-weight: 600; color: #91cc75; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-  .card p { font-size: 13px; color: #8892a4; line-height: 1.55; }
-  .card .meta { font-size: 11.5px; color: #5a6375; margin-top: 8px; }
-  .card a { color: #73a0de; text-decoration: none; }
-  .card a:hover { text-decoration: underline; }
+  .card:hover{border-color:#94a3b8}
+  .card h4{font-size:14px;font-weight:600;color:#16a34a;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .card p{font-size:13px;color:#475569;line-height:1.55}
+  .card .meta{font-size:11.5px;color:#94a3b8;margin-top:6px}
+  .card a{color:#2563eb;text-decoration:none}
+  .card a:hover{text-decoration:underline}
 
-  /* ── Tags ── */
-  .score {
-    display: inline-flex; align-items: center;
-    background: rgba(250,200,88,0.1); color: #fac858;
-    padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  .score{
+    display:inline-flex;align-items:center;
+    background:rgba(202,138,4,0.1);color:#a16207;
+    padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;
   }
-  .method-tag {
-    display: inline-flex; align-items: center;
-    padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500;
-    background: rgba(115,192,222,0.12); color: #73c0de;
+  .method-tag{
+    display:inline-flex;align-items:center;
+    padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500;
+    background:rgba(37,99,235,0.08);color:#2563eb;
   }
 
   /* ── QA ── */
-  .answer-box {
-    background: #111620; border: 1px solid #1e2433; border-radius: 10px;
-    padding: 20px 22px; line-height: 1.75; font-size: 14px;
+  .answer-box{
+    background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
+    border-radius:10px;padding:20px 22px;line-height:1.75;font-size:14px;
+    backdrop-filter:blur(8px);
   }
-  .answer-box h1, .answer-box h2, .answer-box h3 { color: #e4e7ee; margin: 16px 0 8px; }
-  .answer-box h1 { font-size: 18px; } .answer-box h2 { font-size: 16px; } .answer-box h3 { font-size: 14px; }
-  .answer-box p { margin: 6px 0; }
-  .answer-box ul, .answer-box ol { padding-left: 20px; margin: 6px 0; }
-  .answer-box li { margin: 2px 0; }
-  .answer-box strong { color: #e4e7ee; }
-  .answer-box code { background: #1a1d2a; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-  .answer-box pre { background: #0a0c12; padding: 12px; border-radius: 8px; overflow-x: auto; }
-  .answer-box blockquote { border-left: 3px solid #5470c6; padding-left: 12px; color: #8892a4; margin: 8px 0; }
-  .answer-box a { color: #73a0de; }
-  .sources {
-    margin-top: 14px; font-size: 12px; color: #6b7280;
-    background: rgba(84,112,198,0.05); border: 1px solid #1e2433;
-    border-radius: 8px; padding: 12px 16px;
+  .answer-box h1,.answer-box h2,.answer-box h3{color:#1e293b;margin:16px 0 8px}
+  .answer-box h1{font-size:18px}.answer-box h2{font-size:16px}.answer-box h3{font-size:14px}
+  .answer-box p{margin:6px 0}
+  .answer-box ul,.answer-box ol{padding-left:20px;margin:6px 0}
+  .answer-box strong{color:#1e293b}
+  .answer-box code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:13px}
+  .answer-box blockquote{border-left:3px solid #2563eb;padding-left:12px;color:#64748b;margin:8px 0}
+  .answer-box a{color:#2563eb}
+  .sources{
+    margin-top:14px;font-size:12px;color:#64748b;
+    background:rgba(37,99,235,0.03);border:1px solid #e2e8f0;
+    border-radius:8px;padding:12px 16px;
   }
-  .sources span { color: #73a0de; }
 
   /* ── Image grid ── */
-  .img-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 14px;
+  .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .img-card{
+    background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
+    border-radius:10px;overflow:hidden;transition:all .2s;cursor:pointer;
+    backdrop-filter:blur(8px);
   }
-  .img-card {
-    background: #111620; border: 1px solid #1e2433; border-radius: 10px;
-    overflow: hidden; transition: all 0.2s ease; cursor: pointer;
-  }
-  .img-card:hover { border-color: #3d4a63; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-  .img-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
-  .img-card .info { padding: 12px 14px; }
-  .img-card .info h4 { font-size: 13px; font-weight: 600; color: #91cc75; margin-bottom: 4px; }
-  .img-card .info p { color: #6b7280; font-size: 11px; }
-
-  /* ── States ── */
-  .loading {
-    color: #fac858; text-align: center; padding: 32px;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-  }
-  .loading::before {
-    content: ''; width: 18px; height: 18px; border: 2px solid #333;
-    border-top-color: #fac858; border-radius: 50%; animation: spin 0.6s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .error {
-    color: #f87171; background: rgba(248,113,113,0.08);
-    border: 1px solid rgba(248,113,113,0.2); border-radius: 10px; padding: 14px 18px;
-  }
-
-  /* ── Pipeline ── */
-  /* ── Doc viewer ── */
-  .doc-viewer { display:none; }
-  .doc-viewer.show { display:block; }
-  .doc-back { color:#73a0de; cursor:pointer; font-size:13px; margin-bottom:14px; display:inline-block; user-select:none; }
-  .doc-back:hover { color:#91b8f0; }
-  .doc-meta { font-size:12px; color:#5a6375; margin-bottom:16px; }
-  .doc-body { line-height:1.75; font-size:14px; }
-  .doc-body h1, .doc-body h2, .doc-body h3 { color:#e4e7ee; margin:16px 0 8px; }
-  .doc-body h1 { font-size:18px; } .doc-body h2 { font-size:15px; } .doc-body h3 { font-size:14px; }
-  .doc-body p { margin:6px 0; }
-  .doc-body ul, .doc-body ol { padding-left:20px; }
-  .doc-body strong { color:#e4e7ee; }
-  .doc-body a { color:#73a0de; }
-
-  #pipeline-log {
-    background: #0a0c12; border: 1px solid #1e2433; border-radius: 10px;
-    padding: 16px 20px; font-family: "Cascadia Code", "Consolas", monospace;
-    font-size: 12.5px; color: #91cc75; max-height: 320px; overflow-y: auto;
-    white-space: pre-wrap; margin-top: 12px; line-height: 1.6;
-  }
+  .img-card:hover{border-color:#2563eb;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+  .img-card img{width:100%;height:150px;object-fit:cover;display:block}
+  .img-card .info{padding:12px 14px}
+  .img-card .info h4{font-size:13px;font-weight:600;color:#16a34a;margin-bottom:4px}
+  .img-card .info p{color:#64748b;font-size:11px}
 
   /* ── Lightbox ── */
-  .lightbox { display:none; position:fixed; top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:200;justify-content:center;align-items:center;cursor:pointer; }
-  .lightbox.show { display:flex; }
-  .lightbox img { max-width:92vw; max-height:92vh; border-radius:8px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
-  .lightbox .close { position:absolute;top:16px;right:24px;color:#aaa;font-size:32px;cursor:pointer; }
-  .lightbox .close:hover { color:#fff; }
+  .lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.92);z-index:200;justify-content:center;align-items:center;cursor:pointer}
+  .lightbox.show{display:flex}
+  .lightbox img{max-width:92vw;max-height:92vh;border-radius:8px}
+  .lightbox .close{position:absolute;top:16px;right:24px;color:#cbd5e1;font-size:32px;cursor:pointer}
+  .lightbox .close:hover{color:#fff}
 
-  /* ── Graph ── */
-  #tab-graph { padding: 0; max-width: none; }
-  #graphFrame { width: 100%; height: calc(100vh - 52px); border: none; }
+  /* ── Doc viewer ── */
+  .doc-viewer{display:none}
+  .doc-viewer.show{display:block}
+  .doc-back{color:#2563eb;cursor:pointer;font-size:13px;margin-bottom:14px;display:inline-block}
+  .doc-back:hover{color:#1d4ed8}
+  .doc-body{line-height:1.75;font-size:14px}
+  .doc-body h1,.doc-body h2,.doc-body h3{color:#1e293b;margin:16px 0 8px}
+  .doc-body h1{font-size:18px}.doc-body h2{font-size:15px}.doc-body h3{font-size:14px}
+  .doc-body p{margin:6px 0}.doc-body ul,.doc-body ol{padding-left:20px}
+  .doc-body strong{color:#1e293b}.doc-body a{color:#2563eb}
+
+  /* ── States ── */
+  .loading{color:#a16207;text-align:center;padding:32px;display:flex;align-items:center;justify-content:center;gap:10px}
+  .loading::before{content:'';width:18px;height:18px;border:2px solid #e2e8f0;border-top-color:#a16207;border-radius:50%;animation:spin .6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .error{color:#dc2626;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.15);border-radius:10px;padding:14px 18px}
+
+  #pipeline-log{
+    background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;
+    padding:14px 18px;font-family:"Cascadia Code","Consolas",monospace;
+    font-size:12px;color:#16a34a;max-height:280px;overflow-y:auto;
+    white-space:pre-wrap;margin-top:10px;line-height:1.6;
+  }
+
+  #tab-graph{padding:0;max-width:none}
+  #graphFrame{width:100%;height:calc(100vh - 52px);border:none}
+
+  @media(max-width:768px){.home-split{flex-direction:column}}
 </style>
 </head>
 <body>
@@ -213,24 +193,51 @@
 
 <!-- Tab: Home -->
 <div id="tab-home" class="tab active">
-  <h2>搜索知识库</h2>
-  <div class="row">
-    <input id="search-query" placeholder="输入关键词搜索..." onkeydown="if(event.key==='Enter')doSearch()">
-    <button onclick="doSearch()">搜索</button>
-  </div>
-  <div id="search-result"></div>
-  <div id="doc-viewer" class="doc-viewer">
-    <span class="doc-back" onclick="closeDoc()">← 返回搜索结果</span>
-    <div id="doc-content"></div>
-  </div>
+  <div class="home-split">
 
-  <h3>抓取小红书</h3>
-  <div class="row">
-    <input id="pipeline-kw" placeholder="输入搜索关键词...">
-    <input id="pipeline-cnt" type="number" value="3" min="1" max="10">
-    <button onclick="doPipeline()">一键抓取</button>
+    <div class="home-intro">
+      <div class="intro-card">
+        <h1>小红书知识库</h1>
+        <p>一个自动化的知识管理平台——从小红书抓取帖子、OCR 识别图片文字、AI 分类整理、构建本地可搜索的知识库。</p>
+        <p>支持语义搜索、RAG 问答、知识图谱可视化、文搜图等能力，所有数据存储在本地。</p>
+        <div class="features">
+          <span class="feat-tag">语义搜索</span>
+          <span class="feat-tag">RAG 问答</span>
+          <span class="feat-tag">知识图谱</span>
+          <span class="feat-tag">文搜图</span>
+          <span class="feat-tag">OCR 识别</span>
+          <span class="feat-tag">AI 分类</span>
+          <span class="feat-tag">本地存储</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-func">
+      <div class="func-block">
+        <h3>搜索知识库</h3>
+        <div class="row">
+          <input id="search-query" placeholder="输入关键词搜索..." onkeydown="if(event.key==='Enter')doSearch()">
+          <button onclick="doSearch()">搜索</button>
+        </div>
+        <div id="search-result"></div>
+        <div id="doc-viewer" class="doc-viewer">
+          <span class="doc-back" onclick="closeDoc()">← 返回搜索结果</span>
+          <div id="doc-content"></div>
+        </div>
+      </div>
+
+      <div class="func-block">
+        <h3>抓取小红书</h3>
+        <div class="row">
+          <input id="pipeline-kw" placeholder="输入搜索关键词...">
+          <input id="pipeline-cnt" type="number" value="3" min="1" max="10">
+          <button onclick="doPipeline()">一键抓取</button>
+        </div>
+        <div id="pipeline-log" style="display:none"></div>
+      </div>
+    </div>
+
   </div>
-  <div id="pipeline-log" style="display:none"></div>
 </div>
 
 <!-- Tab: QA -->
@@ -265,142 +272,108 @@
 </div>
 
 <script>
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  const labels = {home:'主页', qa:'问答', graph:'图谱', images:'搜图'};
-  document.querySelectorAll('nav button').forEach(b => {
-    if (b.textContent.includes(labels[name])) b.classList.add('active');
-  });
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  var labels={home:'主页',qa:'问答',graph:'图谱',images:'搜图'};
+  document.querySelectorAll('nav button').forEach(b=>{if(b.textContent.includes(labels[name]))b.classList.add('active')});
 }
 
-async function api(path, params) {
-  const qs = new URLSearchParams(params).toString();
-  const resp = await fetch('/api/' + path + '?' + qs);
-  if (!resp.ok) throw new Error((await resp.json()).error || resp.statusText);
+async function api(path,params){
+  var qs=new URLSearchParams(params).toString();
+  var resp=await fetch('/api/'+path+'?'+qs);
+  if(!resp.ok)throw new Error((await resp.json()).error||resp.statusText);
   return resp.json();
 }
 
-async function doSearch() {
-  const q = document.getElementById('search-query').value.trim();
-  if (!q) return;
-  const el = document.getElementById('search-result');
-  el.innerHTML = '<div class="loading">搜索中...</div>';
-  try {
-    const data = await api('search', {query: q, top_k: 10});
-    let html = '';
-    data.results.forEach((r, i) => {
-      html += `<div class="card">
-        <h4>${i+1}. ${r.title || '未知'}
-          <span class="score">${(r.score*100).toFixed(0)}%</span>
-          <span class="method-tag">${r.method}</span>
-        </h4>
-        <p>${(r.content||'').substring(0,200)}</p>
-        <div class="meta">${r.category || ''} &nbsp;·&nbsp; <a href="#" onclick="event.preventDefault();openDoc('${(r.path||'').replace(/\\/g,'/')}')">查看文档</a> ${r.url ? '· <a href="'+r.url+'" target="_blank">原文 &nearr;</a>' : ''}</div>
-      </div>`;
+async function doSearch(){
+  var q=document.getElementById('search-query').value.trim();if(!q)return;
+  var el=document.getElementById('search-result');
+  el.innerHTML='<div class="loading">搜索中...</div>';
+  try{
+    var data=await api('search',{query:q,top_k:10});
+    var html='';
+    data.results.forEach(function(r,i){
+      html+='<div class="card"><h4>'+(i+1)+'. '+(r.title||'未知')+
+        ' <span class="score">'+(r.score*100).toFixed(0)+'%</span>'+
+        '<span class="method-tag">'+r.method+'</span></h4>'+
+        '<p>'+(r.content||'').substring(0,200)+'</p>'+
+        '<div class="meta">'+(r.category||'')+' &nbsp;·&nbsp; '+
+        '<a href="#" onclick="event.preventDefault();openDoc(\''+(r.path||'').replace(/\\/g,'/')+'\')">查看文档</a>'+
+        (r.url?' · <a href="'+r.url+'" target="_blank">原文 &nearr;</a>':'')+'</div></div>';
     });
-    el.innerHTML = html || '<p style="color:#6b7280;text-align:center;padding:32px">未找到结果</p>';
-  } catch (e) {
-    el.innerHTML = '<div class="error">搜索失败: ' + e.message + '</div>';
-  }
+    el.innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:32px">未找到结果</p>';
+  }catch(e){el.innerHTML='<div class="error">搜索失败: '+e.message+'</div>'}
 }
 
-async function doAsk() {
-  const q = document.getElementById('qa-question').value.trim();
-  if (!q) return;
-  const el = document.getElementById('qa-result');
-  el.innerHTML = '<div class="loading">思考中...</div>';
-  try {
-    const data = await api('ask', {question: q, top_k: 5});
-    let answerHtml = typeof marked !== 'undefined'
-      ? marked.parse(data.answer)
-      : data.answer.replace(/</g,'&lt;').replace(/\n/g,'<br>');
-    let html = '<div class="answer-box">' + answerHtml + '</div>';
-    if (data.sources.length) {
-      html += '<div class="sources">📄 引用来源: ';
-      html += data.sources.map(s => `<span>${s.title}</span> (${(s.score*100).toFixed(0)}%)`).join(' &nbsp;·&nbsp; ');
-      html += '</div>';
+async function doAsk(){
+  var q=document.getElementById('qa-question').value.trim();if(!q)return;
+  var el=document.getElementById('qa-result');
+  el.innerHTML='<div class="loading">思考中...</div>';
+  try{
+    var data=await api('ask',{question:q,top_k:5});
+    var answerHtml=typeof marked!=='undefined'?marked.parse(data.answer):data.answer.replace(/</g,'&lt;').replace(/\n/g,'<br>');
+    var html='<div class="answer-box">'+answerHtml+'</div>';
+    if(data.sources.length){
+      html+='<div class="sources">📄 引用来源: ';
+      html+=data.sources.map(function(s){return '<span style="color:#2563eb">'+s.title+'</span> ('+(s.score*100).toFixed(0)+'%)'}).join(' &nbsp;·&nbsp; ');
+      html+='</div>';
     }
-    el.innerHTML = html;
-  } catch (e) {
-    el.innerHTML = '<div class="error">问答失败: ' + e.message + '</div>';
-  }
+    el.innerHTML=html;
+  }catch(e){el.innerHTML='<div class="error">问答失败: '+e.message+'</div>'}
 }
 
-function openLightbox(src) {
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox').classList.add('show');
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('show');
-}
-async function openDoc(path) {
-  const el = document.getElementById('doc-viewer');
-  const content = document.getElementById('doc-content');
-  el.classList.add('show');
-  document.getElementById('search-result').style.display = 'none';
-  content.innerHTML = '<div class="loading">加载文档...</div>';
-  try {
-    const resp = await fetch('/api/doc?path=' + encodeURIComponent(path));
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error);
-    const html = typeof marked !== 'undefined' ? marked.parse(data.content) : data.content;
-    content.innerHTML = `<div class="doc-body">${html}</div>`;
-  } catch (e) {
-    content.innerHTML = '<div class="error">加载失败: ' + e.message + '</div>';
-  }
-}
-function closeDoc() {
-  document.getElementById('doc-viewer').classList.remove('show');
-  document.getElementById('search-result').style.display = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closeDoc(); } });
-
-async function doImgSearch() {
-  const q = document.getElementById('img-query').value.trim();
-  if (!q) return;
-  const el = document.getElementById('img-result');
-  el.innerHTML = '<div class="loading">搜索图片...</div>';
-  try {
-    const data = await api('search-images', {query: q, top_k: 10});
-    let html = '<div class="img-grid">';
-    data.results.forEach(r => {
-      const imgSrc = '/images/' + r.image_path.split('/').pop();
-      html += `<div class="img-card" onclick="openLightbox('${imgSrc}')">
-        <img src="${imgSrc}" alt="${r.post_title||''}" loading="lazy"
-             onerror="this.style.background='#1a1d2a';this.style.height='150px'">
-        <div class="info">
-          <h4>${(r.post_title||'').substring(0,40)}</h4>
-          <p><span class="score" style="font-size:10px">${(r.score*100).toFixed(1)}%</span> &nbsp;${r.category||''}</p>
-          <p style="margin-top:6px;color:#5a6375">${(r.content||'').substring(0,80)}</p>
-        </div>
-      </div>`;
+async function doImgSearch(){
+  var q=document.getElementById('img-query').value.trim();if(!q)return;
+  var el=document.getElementById('img-result');
+  el.innerHTML='<div class="loading">搜索图片...</div>';
+  try{
+    var data=await api('search-images',{query:q,top_k:10});
+    var html='<div class="img-grid">';
+    data.results.forEach(function(r){
+      var imgSrc='/images/'+r.image_path.split('/').pop();
+      html+='<div class="img-card" onclick="openLightbox(\''+imgSrc+'\')">'+
+        '<img src="'+imgSrc+'" alt="'+(r.post_title||'')+'" loading="lazy" onerror="this.style.background=\'#f1f5f9\';this.style.height=\'150px\'">'+
+        '<div class="info"><h4>'+(r.post_title||'').substring(0,40)+'</h4>'+
+        '<p><span class="score" style="font-size:10px">'+(r.score*100).toFixed(1)+'%</span> &nbsp;'+(r.category||'')+'</p>'+
+        '<p style="margin-top:6px;color:#94a3b8">'+(r.content||'').substring(0,80)+'</p></div></div>';
     });
-    html += '</div>';
-    el.innerHTML = html || '<p style="color:#6b7280;text-align:center;padding:32px">未找到匹配图片</p>';
-  } catch (e) {
-    el.innerHTML = '<div class="error">搜图失败: ' + e.message + '</div>';
-  }
+    html+='</div>';
+    el.innerHTML=html||'<p style="color:#94a3b8;text-align:center;padding:32px">未找到匹配图片</p>';
+  }catch(e){el.innerHTML='<div class="error">搜图失败: '+e.message+'</div>'}
 }
 
-async function doPipeline() {
-  const kw = document.getElementById('pipeline-kw').value.trim();
-  const cnt = parseInt(document.getElementById('pipeline-cnt').value) || 3;
-  if (!kw) return;
-  const log = document.getElementById('pipeline-log');
-  log.style.display = 'block';
-  log.textContent = '搜索中...\n';
-  try {
-    const resp = await fetch('/api/pipeline?keyword=' + encodeURIComponent(kw) + '&count=' + cnt, {method: 'POST'});
-    const data = await resp.json();
-    log.textContent += `搜索完成: ${data.results_found} 条结果。\n\n`;
-    log.textContent += `完整 Pipeline (抓取+格式化+分类+构建) 请在终端运行:\n`;
-    log.textContent += `    python xiaohongshu.py run --keywords "${kw}" --count ${cnt}\n`;
-    log.textContent += `或通过 MCP 工具: run_pipeline(keyword="${kw}", count=${cnt})`;
-  } catch (e) {
-    log.textContent += '错误: ' + e.message;
-  }
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('show')}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show')}
+
+async function openDoc(path){
+  var el=document.getElementById('doc-viewer'),content=document.getElementById('doc-content');
+  el.classList.add('show');document.getElementById('search-result').style.display='none';
+  content.innerHTML='<div class="loading">加载文档...</div>';
+  try{
+    var resp=await fetch('/api/doc?path='+encodeURIComponent(path));
+    var data=await resp.json();
+    if(data.error)throw new Error(data.error);
+    var html=typeof marked!=='undefined'?marked.parse(data.content):data.content;
+    content.innerHTML='<div class="doc-body">'+html+'</div>';
+  }catch(e){content.innerHTML='<div class="error">加载失败: '+e.message+'</div>'}
+}
+function closeDoc(){document.getElementById('doc-viewer').classList.remove('show');document.getElementById('search-result').style.display=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightbox();closeDoc()}});
+
+async function doPipeline(){
+  var kw=document.getElementById('pipeline-kw').value.trim();
+  var cnt=parseInt(document.getElementById('pipeline-cnt').value)||3;
+  if(!kw)return;
+  var log=document.getElementById('pipeline-log');
+  log.style.display='block';log.textContent='搜索中...\n';
+  try{
+    var resp=await fetch('/api/pipeline?keyword='+encodeURIComponent(kw)+'&count='+cnt,{method:'POST'});
+    var data=await resp.json();
+    log.textContent+='搜索完成: '+data.results_found+' 条结果。\n\n';
+    log.textContent+='完整 Pipeline 请在终端运行:\n    python xiaohongshu.py run --keywords "'+kw+'" --count '+cnt;
+  }catch(e){log.textContent+='错误: '+e.message}
 }
 </script>
 </body>

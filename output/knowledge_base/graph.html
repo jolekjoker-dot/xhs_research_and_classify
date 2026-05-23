@@ -7,23 +7,52 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #1a1a2e; overflow: hidden; }
-  #topbar { display: flex; align-items: center; padding: 10px 20px; background: #16213e; gap: 16px; border-bottom: 1px solid #333; }
-  #topbar h1 { font-size: 16px; color: #e0e0e0; }
-  #topbar input { padding: 4px 10px; border: 1px solid #444; border-radius: 4px; background: #1a1a2e; color: #e0e0e0; width: 220px; }
-  #topbar input:focus { outline: none; border-color: #5470c6; }
-  #legend { display: flex; gap: 10px; flex-wrap: wrap; padding: 6px 20px; background: #16213e; }
-  .leg { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #999; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+    overflow: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(148,163,184,0.04) 40px, rgba(148,163,184,0.04) 42px
+    ),
+    repeating-linear-gradient(
+      -45deg, transparent, transparent 40px,
+      rgba(148,163,184,0.04) 40px, rgba(148,163,184,0.04) 42px
+    );
+    pointer-events: none; z-index: 0;
+  }
+  #topbar {
+    display: flex; align-items: center; padding: 10px 20px;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+    gap: 16px; border-bottom: 1px solid #e2e8f0;
+    position: relative; z-index: 1;
+  }
+  #topbar h1 { font-size: 16px; color: #1e293b; }
+  #topbar input {
+    padding: 4px 10px; border: 1px solid #cbd5e1; border-radius: 4px;
+    background: #fff; color: #334155; width: 220px;
+  }
+  #topbar input:focus { outline: none; border-color: #2563eb; }
+  #legend {
+    display: flex; gap: 10px; flex-wrap: wrap; padding: 6px 20px;
+    background: rgba(255,255,255,0.7); border-bottom: 1px solid #e2e8f0;
+    position: relative; z-index: 1;
+  }
+  .leg { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #64748b; }
   .leg b { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  #main { width: 100vw; height: calc(100vh - 78px); }
-  #foot { position: fixed; bottom: 10px; right: 16px; color: #666; font-size: 11px; z-index: 10; }
+  #main { width: 100vw; height: calc(100vh - 78px); position: relative; z-index: 1; background: #f8fafc; }
+  #main canvas { background: #f8fafc !important; }
+  #foot { position: fixed; bottom: 10px; right: 16px; color: #94a3b8; font-size: 11px; z-index: 10; }
 </style>
 </head>
 <body>
 <div id="topbar">
   <h1>XHS Knowledge Graph</h1>
   <input id="search" type="text" placeholder="搜索节点..." autocomplete="off">
-  <span id="msg" style="color:#91cc75;font-size:12px;margin-left:auto"></span>
+  <span id="msg" style="color:#16a34a;font-size:12px;margin-left:auto"></span>
 </div>
 <div id="legend"></div>
 <div id="main"></div>
@@ -44,7 +73,7 @@ try {
     .then(data => {
       if (!data.nodes.length) {
         msg.textContent = "无数据";
-        msg.style.color = "#fac858";
+        msg.style.color = "#a16207";
         return;
       }
 
@@ -77,7 +106,7 @@ try {
       // chart
       const chart = echarts.init(main);
       chart.setOption({
-        backgroundColor: "#1a1a2e",
+        backgroundColor: "#f8fafc",
         animation: true,
         series: [{
           type: "graph",
@@ -90,14 +119,14 @@ try {
             source: e.source,
             target: e.target,
             lineStyle: {
-              color: e.type === "similar" ? "#ee6666" : e.type === "entity" ? "#73c0de" : "#444",
-              opacity: 0.25,
+              color: e.type === "similar" ? "#dc2626" : e.type === "entity" ? "#2563eb" : "#cbd5e1",
+              opacity: 0.35,
               width: e.type === "similar" ? 1.5 : 0.4,
             },
           })),
           categories: catList,
           emphasis: { focus: "adjacency", lineStyle: { width: 3 } },
-          label: { show: true, fontSize: 10, color: "#aaa", overflow: "truncate", width: 80 },
+          label: { show: true, fontSize: 10, color: "#475569", overflow: "truncate", width: 80 },
         }],
       });
 
@@ -112,10 +141,11 @@ try {
       document.getElementById("search").addEventListener("input", () => {
         const q = document.getElementById("search").value.trim().toLowerCase();
         chart.setOption({
+          backgroundColor: "#f8fafc",
           series: [{
             data: data.nodes.map(n => ({
               ...n,
-              itemStyle: { ...n.itemStyle, opacity: (!q || n.name.toLowerCase().includes(q)) ? 1 : 0.06 },
+              itemStyle: { ...n.itemStyle, opacity: (!q || n.name.toLowerCase().includes(q)) ? 1 : 0.1 },
             })),
           }],
         });
