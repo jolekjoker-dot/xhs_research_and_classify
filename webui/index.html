@@ -178,6 +178,19 @@
     white-space:pre-wrap;margin-top:10px;line-height:1.6;
   }
 
+  /* ── Trace ── */
+  .trace-toggle{font-size:12px;color:#2563eb;cursor:pointer;margin-top:12px;display:inline-block}
+  .trace-toggle:hover{text-decoration:underline}
+  .trace-panel{display:none;margin-top:8px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;font-size:12px;font-family:"Cascadia Code","Consolas",monospace}
+  .trace-panel.show{display:block}
+  .trace-panel .step{display:flex;align-items:center;gap:10px;padding:4px 0;color:#475569}
+  .trace-panel .step .step-name{font-weight:600;min-width:70px;color:#1e293b}
+  .trace-panel .step.sub-step .step-name{padding-left:12px;font-weight:500}
+  .trace-panel .step .step-bar{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden}
+  .trace-panel .step .step-fill{height:100%;background:#2563eb;border-radius:3px}
+  .trace-panel .step .step-time{min-width:60px;text-align:right;color:#64748b}
+  .trace-total{padding-top:6px;border-top:1px solid #e2e8f0;margin-top:4px;color:#1e293b;font-weight:600}
+
   #tab-graph{padding:0;max-width:none}
   #graphFrame{width:100%;height:calc(100vh - 52px);border:none}
 
@@ -339,6 +352,35 @@ async function doAsk(){
       html+='<div class="sources">📄 引用来源 (搜索方式: '+(METHOD_LABELS[data.method]||data.method)+'): ';
       html+=data.sources.map(function(s){return '<span style="color:#2563eb">'+s.title+'</span> ('+(s.score*100).toFixed(0)+'%)'}).join(' &nbsp;·&nbsp; ');
       html+='</div>';
+    }
+    // trace panel - tree style
+    if (data.trace && data.trace.steps) {
+      var steps = data.trace.steps;
+      var maxMs = Math.max.apply(null, steps.map(function(s){return s.duration_ms}));
+      // separate LLM step from retrieval sub-steps
+      var retrievalSteps = steps.filter(function(s){return s.step !== 'LLM'});
+      var llmStep = steps.filter(function(s){return s.step === 'LLM'})[0];
+      html+='<span class="trace-toggle" onclick="this.nextElementSibling.classList.toggle(\'show\')">🔍 查看追踪详情 ('+data.trace.total_ms+'ms)</span>';
+      html+='<div class="trace-panel">';
+      // Retrieval row
+      var retMs = retrievalSteps.reduce(function(a,s){return a+s.duration_ms}, 0);
+      var retPct = maxMs>0 ? (retMs/maxMs*100) : 100;
+      html+='<div class="step"><span class="step-name">检索</span><span class="step-bar"><span class="step-fill" style="width:'+retPct+'%"></span></span><span class="step-time">'+retMs+'ms</span></div>';
+      // Sub-steps
+      retrievalSteps.forEach(function(s, i){
+        var isLast = i === retrievalSteps.length - 1;
+        var prefix = isLast ? '└─ ' : '├─ ';
+        var pct = maxMs>0 ? (s.duration_ms/maxMs*100) : 100;
+        var detail = s.detail ? ' — '+s.detail : '';
+        html+='<div class="step sub-step"><span class="step-name">'+prefix+s.step+'</span><span class="step-bar"><span class="step-fill" style="width:'+pct+'%"></span></span><span class="step-time">'+s.duration_ms+'ms'+detail+'</span></div>';
+      });
+      // LLM row
+      if (llmStep) {
+        var llmPct = maxMs>0 ? (llmStep.duration_ms/maxMs*100) : 100;
+        var llmDetail = llmStep.detail ? ' ('+llmStep.detail+')' : '';
+        html+='<div class="step"><span class="step-name">LLM</span><span class="step-bar"><span class="step-fill" style="width:'+llmPct+'%"></span></span><span class="step-time">'+llmStep.duration_ms+'ms'+llmDetail+'</span></div>';
+      }
+      html+='<div class="trace-total">总耗时: '+data.trace.total_ms+'ms</div></div>';
     }
     el.innerHTML=html;
   }catch(e){el.innerHTML='<div class="error">问答失败: '+e.message+'</div>'}

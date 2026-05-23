@@ -7,6 +7,7 @@ from openai import OpenAI
 
 from src.config import get_config
 from src.kb_agent.rag_engine import hybrid_search
+from src.kb_agent.tracer import Trace
 from src.logger import get_logger
 
 log = get_logger(__name__)
@@ -90,8 +91,10 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
     method: keyword | semantic | rrf | rrf+rerank | semantic+rerank
     Returns {"answer": str, "sources": list[dict], "query": str, "method": str}
     """
-    # 1. Retrieve relevant documents
-    docs = _search_by_method(query, top_k, method)
+    trace = Trace()
+
+    # 1. Retrieve relevant documents (tracing handled inside _search_by_method)
+    docs = _search_by_method(query, top_k, method, trace)
     if not docs:
         return {
             "answer": "知识库中未找到相关内容，无法回答此问题。",
@@ -127,6 +130,7 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
     config = get_config()
     client = OpenAI(api_key=config.api_key, base_url=config.api_base_url)
 
+    trace.start("LLM", f"model={config.api_model}")
     try:
         response = client.chat.completions.create(
             model=config.api_model,
@@ -138,8 +142,11 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
             max_tokens=1500,
         )
         answer = response.choices[0].message.content or "生成答案失败，请重试。"
+        trace.end("LLM", detail=f"上下文 {len(context)}字→{len(answer)}字",
+                   ctx_chars=len(context), ans_chars=len(answer))
         log.info("QA complete: %d chars answer, %d sources", len(answer), len(sources))
     except Exception:
+        trace.end("LLM", detail="失败")
         log.exception("QA LLM call failed")
         answer = "LLM 调用失败，请检查 API 配置。以下是相关文档链接："
         for s in sources:
@@ -150,31 +157,57 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
         "sources": sources,
         "query": query,
         "method": method,
+        "trace": trace.to_dict(),
     }
 
 
-def _search_by_method(query: str, top_k: int, method: str) -> list[dict]:
-    """dispatch to the right search method"""
+def _search_by_method(query: str, top_k: int, method: str, trace=None) -> list[dict]:
+    """dispatch to the right search method, with optional trace"""
     from src.kb_agent.rag_engine import (
         keyword_search, semantic_search, _rrf_fusion, hybrid_search,
     )
     from src.kb_agent.reranker import ReRanker
 
     if method == "keyword":
-        return keyword_search(query, top_k=top_k)
+        if trace: trace.start("keyword")
+        r = keyword_search(query, top_k=top_k)
+        if trace: trace.end("keyword", detail=f"命中 {len(r)} 篇", count=len(r))
+        return r
     elif method == "semantic":
-        return semantic_search(query, top_k=top_k)
+        if trace: trace.start("semantic")
+        r = semantic_search(query, top_k=top_k)
+        if trace: trace.end("semantic", detail=f"命中 {len(r)} 篇", count=len(r))
+        return r
     elif method == "rrf":
+        if trace: trace.start("keyword")
         kw = keyword_search(query, top_k=top_k)
+        if trace: trace.end("keyword", detail=f"命中 {len(kw)} 篇")
+        if trace: trace.start("semantic")
         sem = semantic_search(query, top_k=top_k)
-        return _rrf_fusion(kw, sem)[:top_k]
+        if trace: trace.end("semantic", detail=f"命中 {len(sem)} 篇")
+        if trace: trace.start("RRF")
+        r = _rrf_fusion(kw, sem)[:top_k]
+        if trace: trace.end("RRF", detail=f"融合后 {len(r)} 篇")
+        return r
     elif method == "rrf+rerank":
-        return hybrid_search(query, top_k=top_k, rerank=True)
+        if trace: trace.start("检索")
+        r = hybrid_search(query, top_k=top_k, rerank=True)
+        if trace: trace.end("检索", detail=f"命中 {len(r)} 篇", count=len(r))
+        return r
     elif method == "semantic+rerank":
+        if trace: trace.start("semantic")
         candidates = semantic_search(query, top_k=max(top_k, 20))
+        if trace: trace.end("semantic", detail=f"候选 {len(candidates)} 篇")
+        if trace: trace.start("rerank")
         reranker = ReRanker()
         if reranker._load():
-            return reranker.rerank(query, candidates, top_k=top_k)
+            r = reranker.rerank(query, candidates, top_k=top_k)
+            if trace: trace.end("rerank", detail=f"精排后 top-{len(r)}")
+            return r
+        if trace: trace.end("rerank", detail="未加载，降级")
         return candidates[:top_k]
     else:
-        return hybrid_search(query, top_k=top_k, rerank=True)
+        if trace: trace.start("检索")
+        r = hybrid_search(query, top_k=top_k, rerank=True)
+        if trace: trace.end("检索", detail=f"命中 {len(r)} 篇", count=len(r))
+        return r

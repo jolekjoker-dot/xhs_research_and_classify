@@ -99,6 +99,7 @@ class APIHandler(SimpleHTTPRequestHandler):
         query = qs.get("query", [""])[0]
         top_k = int(qs.get("top_k", ["5"])[0])
         method = qs.get("method", ["semantic+rerank"])[0]
+        from src.kb_agent.searcher import format_results
         results = self._run_search(query, top_k, method)
         return {
             "method": method,
@@ -123,6 +124,7 @@ class APIHandler(SimpleHTTPRequestHandler):
         return {
             "question": question,
             "answer": result["answer"],
+            "trace": result.get("trace", {}),
             "sources": [{
                 "title": s["title"],
                 "score": s["score"],
