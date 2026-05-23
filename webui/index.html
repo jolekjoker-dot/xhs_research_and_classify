@@ -81,7 +81,7 @@
     padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;
   }
   .home-func{flex:1;min-width:0}
-  .home-func .func-block{
+  .func-block{
     background:rgba(255,255,255,0.7);border:1px solid #e2e8f0;
     border-radius:12px;padding:20px 24px;margin-bottom:16px;
     backdrop-filter:blur(8px);
@@ -210,6 +210,16 @@
           <span class="feat-tag">本地存储</span>
         </div>
       </div>
+
+      <div class="func-block" style="margin-top:16px">
+        <h3>抓取小红书</h3>
+        <div class="row">
+          <input id="pipeline-kw" placeholder="输入搜索关键词...">
+          <input id="pipeline-cnt" type="number" value="3" min="1" max="10">
+          <button onclick="doPipeline()">一键抓取</button>
+        </div>
+        <div id="pipeline-log" style="display:none"></div>
+      </div>
     </div>
 
     <div class="home-func">
@@ -224,16 +234,6 @@
           <span class="doc-back" onclick="closeDoc()">← 返回搜索结果</span>
           <div id="doc-content"></div>
         </div>
-      </div>
-
-      <div class="func-block">
-        <h3>抓取小红书</h3>
-        <div class="row">
-          <input id="pipeline-kw" placeholder="输入搜索关键词...">
-          <input id="pipeline-cnt" type="number" value="3" min="1" max="10">
-          <button onclick="doPipeline()">一键抓取</button>
-        </div>
-        <div id="pipeline-log" style="display:none"></div>
       </div>
     </div>
 
