@@ -6,7 +6,8 @@ from pathlib import Path
 from openai import OpenAI
 
 from src.config import get_config
-from src.kb_agent.rag_engine import hybrid_search
+from src.kb_agent.rag_engine import hybrid_search, semantic_search, _rrf_fusion
+from src.kb_agent.reranker import ReRanker
 from src.kb_agent.tracer import Trace
 from src.logger import get_logger
 
@@ -92,9 +93,28 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
     Returns {"answer": str, "sources": list[dict], "query": str, "method": str}
     """
     trace = Trace()
+    rewriter = None
 
-    # 1. Retrieve relevant documents (tracing handled inside _search_by_method)
-    docs = _search_by_method(query, top_k, method, trace)
+    # 0. Rewrite query (if enabled)
+    config = get_config()
+    if getattr(config, "rewrite_enabled", True):
+        from src.kb_agent.rewriter import QueryRewriter
+        rewriter = QueryRewriter()
+        trace.start("rewrite")
+        rewritten = rewriter.rewrite(query)
+        trace.end("rewrite",
+                  detail=f"type={rewritten['type']}, {len(rewritten['queries'])}条query",
+                  rewrite_type=rewritten["type"],
+                  queries=rewritten["queries"],
+                  original=query)
+        # Use rewritten queries if available
+        if rewritten["queries"] and rewritten["queries"] != [query]:
+            docs = _multi_query_search(rewritten["queries"], top_k, method, trace)
+        else:
+            docs = _search_by_method(query, top_k, method, trace)
+    else:
+        docs = _search_by_method(query, top_k, method, trace)
+
     if not docs:
         return {
             "answer": "知识库中未找到相关内容，无法回答此问题。",
@@ -159,6 +179,35 @@ def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank")
         "method": method,
         "trace": trace.to_dict(),
     }
+
+
+def _multi_query_search(queries: list[str], top_k: int, method: str, trace=None) -> list[dict]:
+    """search with multiple rewritten queries, merge via RRF"""
+    if len(queries) == 1:
+        return _search_by_method(queries[0], top_k, method, trace)
+
+    all_results: list[list[dict]] = []
+    for i, q in enumerate(queries):
+        if trace:
+            trace.start(f"搜索{i+1}")
+        r = _search_by_method(q, max(top_k, 10), method if method else "semantic")
+        if trace:
+            trace.end(f"搜索{i+1}", detail=f"\"{q[:30]}\" → {len(r)}篇")
+        all_results.append(r)
+
+    # RRF merge all query results
+    merged = all_results[0]
+    for batch in all_results[1:]:
+        merged = _rrf_fusion(merged, batch)
+
+    # re-rank if method uses rerank
+    if "rerank" in method:
+        reranker = ReRanker()
+        if reranker._load():
+            merged = reranker.rerank(queries[0], merged, top_k=top_k)
+            return merged
+
+    return merged[:top_k]
 
 
 def _search_by_method(query: str, top_k: int, method: str, trace=None) -> list[dict]:
