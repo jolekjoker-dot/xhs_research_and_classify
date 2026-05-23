@@ -2,6 +2,10 @@
 
 搜索小红书 → 抓取正文/图片 → OCR → LLM 格式化 → AI 分类 → 本地 Markdown 知识库
 → RAG 检索 → 问答 → 知识图谱 → 文搜图 → Web UI
+<img width="2022" height="1149" alt="90b6da05039a561b624ab6b00f87d168" src="https://github.com/user-attachments/assets/0a11c477-2571-4ce4-8c26-a62f312fcc6d" />
+<img width="1926" height="1224" alt="88cec87df1d8470326ebc620f5166009" src="https://github.com/user-attachments/assets/f48b5fe1-7869-453a-b6ce-62394c05acf7" />
+<img width="2232" height="1221" alt="2367df984d215c303678de45cbdabbca" src="https://github.com/user-attachments/assets/04018171-7a57-4309-bc6a-d408ed154b70" />
+<img width="2016" height="1215" alt="d185640ddfa3996f02e9595bd187a7de" src="https://github.com/user-attachments/assets/7e4c6c92-b47e-4911-b74c-334f5df62cec" />
 
 ## 快速开始
 
