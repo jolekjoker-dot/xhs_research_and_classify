@@ -6,6 +6,16 @@
 
 ## 2026-05-22
 
+### `c727c4a` feat: P4 — evaluation script + annotated labels + sem+rerank baseline
+
+**改动范围**：检索评测框架 + 5 个标注 query + sem+rerank 对比维度
+
+**影响文件**（3 个）：`tests/test_retrieval.py`（新增）、`docs/optimization_plan.md`、`docs/commit_log.md`
+
+**回退**：`git reset --hard c727c4a~1`
+
+---
+
 ### `4e46de3` feat: P3 — RRF fusion + bge-reranker + search parallelization
 
 **改动范围**：检索链路升级（RRF 融合 + Cross-Encoder 重排 + 并行搜索）

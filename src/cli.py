@@ -143,6 +143,22 @@ def cmd_classify(args: argparse.Namespace) -> None:
     tracker.step_end("classify", f"saved to {output_file}")
 
 
+def cmd_search_images(args: argparse.Namespace) -> None:
+    """搜索图片"""
+    from src.kb_agent.searcher import search_images, format_image_results
+
+    log = get_logger("xhs.imgsearch")
+    add_file_handler(log)
+
+    results = search_images(args.query, top_k=args.count)
+    output = format_image_results(results, args.query)
+    print(output)
+
+    if args.output:
+        Path(args.output).write_text(output, encoding="utf-8")
+        log.info("Saved to %s", args.output)
+
+
 def cmd_build(args: argparse.Namespace) -> None:
     """构建知识库"""
     from src.knowledge_base.builder import build_knowledge_base
@@ -286,6 +302,19 @@ def cmd_run(args: argparse.Namespace) -> None:
         log.exception("Knowledge graph build failed (non-fatal)")
         tracker.step_end("graph", "skipped (error)")
 
+    # Phase 6: Image index
+    if config.image_search_enabled:
+        tracker.step_start(f"[6/6] Build image index")
+        try:
+            from src.kb_agent.image_indexer import build_image_index
+            n = build_image_index()
+            tracker.step_end("img_idx", f"{n} images indexed")
+        except Exception:
+            log.exception("Image index build failed (non-fatal)")
+            tracker.step_end("img_idx", "skipped (error)")
+    else:
+        log.info("[6/6] Image index skipped (disabled)")
+
     log.info("Workflow complete! Open %s/INDEX.md or %s/graph.html", root, root)
 
 
@@ -322,6 +351,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_build.add_argument("--input", required=True, help="json file with classified posts")
     p_build.add_argument("--output", default=None)
 
+    p_img = sub.add_parser("search-images", help="search images by text query")
+    p_img.add_argument("query", help="search query (Chinese or English)")
+    p_img.add_argument("--count", type=int, default=5)
+    p_img.add_argument("--output", default=None)
+
     p_run = sub.add_parser("run", help="run full workflow: search -> scrape -> classify -> build")
     p_run.add_argument("--keywords", required=True, help="search keywords (comma-separated)")
     p_run.add_argument("--count", type=int, default=20)
@@ -345,6 +379,7 @@ def main(argv: list[str] | None = None) -> None:
         "format": cmd_format,
         "classify": cmd_classify,
         "build": cmd_build,
+        "search-images": cmd_search_images,
         "run": cmd_run,
     }
     handler = handlers.get(args.command)

@@ -566,6 +566,68 @@ python -m pytest tests/test_retrieval.py -v -s
 
 ---
 
+## 五-QUATER、文搜图（文字查图片）
+
+### 5D.1 当前问题
+
+抓取时下载了大量帖子图片到 `output/knowledge_base/images/`，OCR 提取的文字已经融入帖子正文。但图片本身无法被直接检索——用户搜"Agent架构图"只能找到帖子，不能直接定位到那张图。
+
+### 5D.2 方案
+
+为每张图片建立独立索引，用 OCR 周围的上下文文字作为图片的"描述"：
+
+```
+MD 文件:  ...正文... ![img_00.jpg](../../images/img_00.jpg) ...更多文字...
+
+ChromaDB xhs_images 集合:
+  document: 图片周围 300 字上下文
+  metadata: {image_path, post_title, post_category, post_url}
+  embedding: GTE 同模型
+```
+
+检索链路：`text query → GTE embedding → xhs_images 向量匹配 → top-k 图片 + 来源`
+
+### 5D.3 使用场景
+
+1. **MCP 工具**：`search_images("Agent架构图")` → 返回匹配图片及来源帖子
+2. **命令行**：`python xiaohongshu.py search-images --query "Agent架构图"`
+3. **可视化**：未来可在 graph.html 旁加图片墙页面
+
+### 5D.4 返回格式
+
+默认返回 top-5 张图片，可调至 20：
+
+```
+搜索: "Agent架构图"
+  ↓
+1. images/69d51830_00.jpg — 相关性 0.89
+   来源: 《腾讯Agent应用开发一面》
+   上下文: "...面试官让我画Agent架构，ReAct模式..."
+
+2. images/69b4daa5_01.jpg — 相关性 0.76
+   来源: 《字节跳动Agent开发一面》
+   上下文: "...多Agent协作，每个Agent有独立的tool set..."
+```
+
+### 5D.5 改动范围
+
+| 文件 | 改动 |
+|------|------|
+| `src/kb_agent/image_indexer.py`（新） | `build_image_index()` — 解析 MD 中每张图片，建 ChromaDB `xhs_images` 集合 |
+| `src/kb_agent/rag_engine.py` | 新增 `image_search(query, top_k)` |
+| `src/kb_agent/searcher.py` | 新增 `search_images()` + `format_image_results()` |
+| `mcp_server/xhs_server.py` | 新增 `search_images` MCP 工具 |
+| `src/cli.py` | `cmd_run` pipeline 新增图片索引步骤；新增 `search-images` 子命令 |
+| `src/config.py` | 新增 `image_search_enabled: bool = True` |
+
+### 5D.6 预估
+
+- 工时：~2h
+- 新增依赖：无（复用 ChromaDB + GTE embedding）
+- 索引规模：与图片数量成正比（当前 ~50 张，每条记录 ~300 字上下文）
+
+---
+
 ## 六、实施优先级
 
 | 优先级 | 改动项 | 预估工时 | 影响范围 | 效果 |
@@ -581,8 +643,9 @@ python -m pytest tests/test_retrieval.py -v -s
 | **P3** | bge-reranker 重排 | ~1h | 新增 reranker.py, rag_engine.py, searcher.py, config.py | 检索精准度质变 |
 | **P3** | 搜索并行化 | ~1h | searcher.py | 多关键词场景加速 |
 | **P4** | 检索评测脚本 + 标注 | ~0.5h | tests/test_retrieval.py | 量化改进效果 |
-| **P5** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
-| **P5** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
+| **P5** | 文搜图 | ~2h | 新增 image_indexer.py, rag_engine.py, searcher.py, cli.py, mcp_server | 文字搜索图片 |
+| **P6** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
+| **P6** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
 
 ---
 
@@ -604,5 +667,8 @@ python -m pytest tests/test_retrieval.py -v -s
 **第四阶段（0.5h）**：检索评测脚本 + 标注
 - 量化 P3 改进效果，跑评测脚本看 Recall/MRR/nDCG 对比
 
-**第五阶段（1-2h）**：protobuf 加速 + 图片去重
+**第五阶段（2h）**：文搜图
+- OCR 文字 → 图片索引，文字搜出匹配图片
+
+**第六阶段（1h）**：protobuf 加速 + 图片去重
 - 锦上添花，长久运行收益累积

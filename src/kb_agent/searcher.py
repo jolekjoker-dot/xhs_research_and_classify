@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from src.config import get_config
-from src.kb_agent.rag_engine import hybrid_search, keyword_search, semantic_search
+from src.kb_agent.rag_engine import hybrid_search, image_search, keyword_search, semantic_search
 from src.logger import get_logger
 
 log = get_logger(__name__)
@@ -115,4 +115,46 @@ def format_results(results: list[dict], query: str) -> str:
     lines.append("---")
     lines.append(f"*检索方式: {', '.join(methods_used)}*")
 
+    return "\n".join(lines)
+
+
+def search_images(query: str, top_k: int = 5) -> list[dict]:
+    """search images by text query, returns list of image results"""
+    results = image_search(query, top_k=top_k)
+    # scope check
+    valid = []
+    for r in results:
+        if r.get("kb_path") and _is_in_scope(r["kb_path"]):
+            valid.append(r)
+    return valid[:top_k]
+
+
+def format_image_results(results: list[dict], query: str) -> str:
+    """format image search results as structured Markdown"""
+    if not results:
+        return f"## 图片检索: \"{query}\"\n\n未找到匹配图片。"
+
+    lines = [
+        f"## 图片检索: \"{query}\"",
+        "",
+        f"### 匹配图片 (共 {len(results)} 张)",
+        "",
+    ]
+
+    for i, r in enumerate(results, 1):
+        img_path = r.get("image_path", "")
+        score = r.get("score", 0)
+        title = r.get("post_title", "")
+        category = r.get("category", "")
+        content = r.get("content", "")
+
+        lines.append(f"{i}. **![{img_path}]({img_path})** — 相关度: {score:.0%}")
+        lines.append(f"   - 来源: {title}")
+        if category:
+            lines.append(f"   - 分类: {category}")
+        lines.append(f"   - 上下文: {content[:200]}")
+        lines.append("")
+
+    lines.append("---")
+    lines.append("*检索方式: 图片语义搜索*")
     return "\n".join(lines)

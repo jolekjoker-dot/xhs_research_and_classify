@@ -219,3 +219,55 @@ def _rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
     except Exception:
         log.exception("Rerank error, falling back to RRF")
     return candidates[:top_k]
+
+
+# ── Image search ────────────────────────────────────────────────
+
+IMAGE_COLLECTION = "xhs_images"
+
+
+def image_search(query: str, top_k: int = 5) -> list[dict]:
+    """semantic search over image index — text query → matching images
+
+    Returns list of dicts with: image_path, score, post_title, category,
+    url, content (context text).
+    """
+    try:
+        client = chromadb.PersistentClient(path=str(CHROMA_DIR))
+        collection = client.get_collection(IMAGE_COLLECTION)
+    except Exception:
+        log.warning("Image index not found, run build_image_index first")
+        return []
+
+    query_embedding = _get_embedding(query)
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=top_k,
+        include=["documents", "metadatas", "distances"],
+    )
+
+    if not results["ids"] or not results["ids"][0]:
+        return []
+
+    output = []
+    for i, img_id in enumerate(results["ids"][0]):
+        meta = results["metadatas"][0][i]
+        distance = results["distances"][0][i]
+        similarity = round(1.0 / (1.0 + float(distance)), 3)
+
+        img_path = meta.get("image_path", "")
+        # resolve to kb-relative path for display
+        kb_path = f"output/knowledge_base/{img_path}"
+
+        output.append({
+            "image_path": img_path,
+            "kb_path": kb_path,
+            "score": similarity,
+            "post_title": meta.get("post_title", ""),
+            "category": meta.get("category", ""),
+            "url": meta.get("url", ""),
+            "content": results["documents"][0][i][:500],
+            "method": "image_semantic",
+        })
+
+    return output

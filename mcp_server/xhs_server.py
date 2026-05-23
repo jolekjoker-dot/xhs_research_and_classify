@@ -149,10 +149,19 @@ def _search_kb_impl(query: str, top_k: int = 5) -> str:
     return format_results(results, query)
 
 
+def _search_images_impl(query: str, top_k: int = 5) -> str:
+    """implement search_images tool - search images by text"""
+    from src.kb_agent.searcher import search_images, format_image_results
+
+    results = search_images(query, top_k=top_k)
+    return format_image_results(results, query)
+
+
 # ── Timeout constants ─────────────────────────────────────────────
 
 TOOL_TIMEOUTS = {
     "search_kb": 30,       # local search should be fast
+    "search_images": 30,   # image search — same as text search
     "search_xhs": 90,      # browser + network + possible captcha
     "run_pipeline": 600,   # full pipeline: search + scrape + OCR + format + classify + build
 }
@@ -220,6 +229,25 @@ async def list_tools() -> list[Tool]:
                 "required": ["query"],
             },
         ),
+        Tool(
+            name="search_images",
+            description="Search for images in the local knowledge base by text query. Uses OCR text and surrounding context to find matching images. Returns image paths with source post info.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "Natural language query to find matching images",
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "description": "Max images to return (default: 5)",
+                        "default": 5,
+                    },
+                },
+                "required": ["query"],
+            },
+        ),
     ]
 
 
@@ -253,6 +281,13 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         top_k = arguments.get("top_k", 5)
         result = await asyncio.wait_for(
             loop.run_in_executor(None, _search_kb_impl, query, top_k),
+            timeout=timeout,
+        )
+    elif name == "search_images":
+        query = arguments.get("query", "")
+        top_k = arguments.get("top_k", 5)
+        result = await asyncio.wait_for(
+            loop.run_in_executor(None, _search_images_impl, query, top_k),
             timeout=timeout,
         )
     else:
