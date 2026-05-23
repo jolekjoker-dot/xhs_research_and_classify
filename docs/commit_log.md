@@ -6,6 +6,26 @@
 
 ## 2026-05-22
 
+### `4e46de3` feat: P3 — RRF fusion + bge-reranker + search parallelization
+
+**改动范围**：检索链路升级（RRF 融合 + Cross-Encoder 重排 + 并行搜索）
+
+**影响文件**（4 个）：`src/kb_agent/rag_engine.py`（RRF+并行+重排调用）、`src/kb_agent/reranker.py`（新增 Cross-Encoder）、`src/kb_agent/searcher.py`（config 读取）、`src/config.py`（rerank_enabled）
+
+**回退**：`git reset --hard 4e46de3~1`
+
+---
+
+### `1dcfa1a` feat: P2 + Xiaomi API provider + retrieval rerank plan
+
+**改动范围**：Pipeline 流式 + LLM 缓存 + 小米 provider + .env + 重排方案
+
+**影响文件**（9 个）：src/classify/{formatter,classifier}.py（缓存+推理模型支持）, src/cli.py（流式 pipeline）, src/config.py（provider 抽象+dotenv）, src/scrape/{scraper,ocr}.py, .gitignore
+
+**回退**：`git reset --hard 1dcfa1a~1`
+
+---
+
 ### `6ad41d4` feat: P1 optimization — OCR batch inference + knowledge graph (Neo4j + ECharts)
 
 **改动范围**：OCR 批处理 + 知识图谱（Neo4j Cypher 查询 + ECharts 可视化）

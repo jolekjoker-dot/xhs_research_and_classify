@@ -503,6 +503,69 @@ pip install FlagEmbedding
 
 ---
 
+## 五-TER、检索评测方案
+
+### 5C.1 评测数据集
+
+从知识库中选取 5 个典型 query，人工标注每个 query 的相关帖子 ID 集合：
+
+| Query | 描述 | 相关帖数 |
+|-------|------|---------|
+| Agent面试经验 | 查找 Agent 岗位面试相关的面经和经验分享 | 5+ |
+| 大厂大模型面经 | 大厂大模型岗位的面试题目和总结 | 5+ |
+| 字节跳动面试 | 字节跳动公司的面试经验帖子 | 3+ |
+| Agent开发技能 | Agent 开发需要掌握的技能讨论 | 2+ |
+| 腾讯面试 | 腾讯公司的面试经验帖子 | 3+ |
+
+标注格式（`tests/test_retrieval.py` 中的 `QUERY_LABELS`）：
+
+```python
+QUERY_LABELS = {
+    "Agent面试经验": {
+        "relevant": ["69c39f58", "69ad4bb9", "69ef3c9e", ...],
+    },
+    ...
+}
+```
+
+### 5C.2 评测指标
+
+| 指标 | 含义 | 公式 |
+|------|------|------|
+| **Recall@20** | 粗排 top-20 命中了多少相关帖 | `found_relevant / total_relevant` |
+| **MRR** | 第一条相关帖的排名倒数 | `1 / rank_of_first_relevant` |
+| **nDCG@5** | 精排前 5 的排序质量 | `DCG / IDCG`（相关=1，无关=0） |
+
+### 5C.3 对比维度
+
+四组并行跑同一 query，横向对比：
+
+```
+keyword_only      → 单路关键词召回基线
+semantic_only     → 单路语义召回基线
+RRF (hybrid)      → RRF 融合，不重排
+RRF + rerank      → RRF 融合 + bge-reranker 重排
+```
+
+### 5C.4 运行方式
+
+```bash
+python -m pytest tests/test_retrieval.py -v -s
+```
+
+输出每 query 的四列对比表 + 重排前后 MRR/nDCG 增益。
+
+### 5C.5 预期结果
+
+| 对比 | 预期 |
+|------|------|
+| semantic vs keyword | semantic Recall 更高（语义泛化） |
+| RRF vs semantic | RRF Recall 持平或更好（双路互补） |
+| RRF+rerank vs RRF | MRR +10~20%，nDCG +10~20%（精排提升排序质量） |
+| 速度 | semantic/keyword 并行，RRF 无额外开销，rerank ~0.1-0.2s |
+
+---
+
 ## 六、实施优先级
 
 | 优先级 | 改动项 | 预估工时 | 影响范围 | 效果 |
@@ -517,8 +580,9 @@ pip install FlagEmbedding
 | **P3** | RRF 多路融合 | ~0.5h | rag_engine.py | 检索排序更合理 |
 | **P3** | bge-reranker 重排 | ~1h | 新增 reranker.py, rag_engine.py, searcher.py, config.py | 检索精准度质变 |
 | **P3** | 搜索并行化 | ~1h | searcher.py | 多关键词场景加速 |
-| **P4** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
-| **P4** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
+| **P4** | 检索评测脚本 + 标注 | ~0.5h | tests/test_retrieval.py | 量化改进效果 |
+| **P5** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
+| **P5** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
 
 ---
 
@@ -537,9 +601,8 @@ pip install FlagEmbedding
 - 端到端进一步加速
 - 需要较多测试（反爬风险）
 
-**第四阶段（1.5-2h）**：RRF 融合 + bge-reranker 重排 + 搜索并行化
-- 检索质量质变，从"能用"到"精准"
-- 改动集中在 kb_agent 模块，风险低
+**第四阶段（0.5h）**：检索评测脚本 + 标注
+- 量化 P3 改进效果，跑评测脚本看 Recall/MRR/nDCG 对比
 
 **第五阶段（1-2h）**：protobuf 加速 + 图片去重
 - 锦上添花，长久运行收益累积
