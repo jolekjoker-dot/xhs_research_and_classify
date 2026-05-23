@@ -157,11 +157,25 @@ def _search_images_impl(query: str, top_k: int = 5) -> str:
     return format_image_results(results, query)
 
 
+def _ask_kb_impl(question: str, top_k: int = 5) -> str:
+    """implement ask_kb tool — RAG QA over knowledge base"""
+    from src.kb_agent.qa import answer_question
+
+    result = answer_question(question, top_k=top_k)
+    lines = [f"## 回答\n\n{result['answer']}"]
+    if result["sources"]:
+        lines.append("\n### 来源")
+        for s in result["sources"]:
+            lines.append(f"- {s['title']} (相关度: {s['score']:.0%})")
+    return "\n".join(lines)
+
+
 # ── Timeout constants ─────────────────────────────────────────────
 
 TOOL_TIMEOUTS = {
     "search_kb": 30,       # local search should be fast
     "search_images": 30,   # image search — same as text search
+    "ask_kb": 60,          # QA — search + LLM call
     "search_xhs": 90,      # browser + network + possible captcha
     "run_pipeline": 600,   # full pipeline: search + scrape + OCR + format + classify + build
 }
@@ -230,6 +244,25 @@ async def list_tools() -> list[Tool]:
             },
         ),
         Tool(
+            name="ask_kb",
+            description="Ask a question and get an answer based on the local knowledge base. Uses RAG: search → retrieve relevant documents → generate answer with LLM. Returns answer with source attribution.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "question": {
+                        "type": "string",
+                        "description": "Question to answer based on the knowledge base",
+                    },
+                    "top_k": {
+                        "type": "integer",
+                        "description": "Number of documents to retrieve (default: 5)",
+                        "default": 5,
+                    },
+                },
+                "required": ["question"],
+            },
+        ),
+        Tool(
             name="search_images",
             description="Search for images in the local knowledge base by text query. Uses OCR text and surrounding context to find matching images. Returns image paths with source post info.",
             inputSchema={
@@ -288,6 +321,13 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         top_k = arguments.get("top_k", 5)
         result = await asyncio.wait_for(
             loop.run_in_executor(None, _search_images_impl, query, top_k),
+            timeout=timeout,
+        )
+    elif name == "ask_kb":
+        question = arguments.get("question", "")
+        top_k = arguments.get("top_k", 5)
+        result = await asyncio.wait_for(
+            loop.run_in_executor(None, _ask_kb_impl, question, top_k),
             timeout=timeout,
         )
     else:

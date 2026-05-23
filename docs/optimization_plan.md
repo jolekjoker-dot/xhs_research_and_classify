@@ -628,6 +628,164 @@ ChromaDB xhs_images 集合:
 
 ---
 
+## 五-QUINQUE、RAG 问答系统
+
+### 5E.1 当前问题
+
+搜索返回文档列表，用户仍需自己阅读文档找答案。缺少"搜 + 读 + 答"的闭环——用户真正需要的是**答案**，不是**文档列表**。
+
+### 5E.2 方案
+
+在现有检索链路上加 LLM 问答层：
+
+```
+用户问题 → 检索(hybrid+rerank) → top-5 相关文档 → LLM(带上下文) → 答案+来源
+```
+
+**核心模块** `src/kb_agent/qa.py`：
+
+```python
+def answer_question(query: str, top_k: int = 5) -> dict:
+    # 1. 检索
+    docs = hybrid_search(query, top_k=top_k)
+
+    # 2. 构建 prompt（知识库内容 + 用户问题）
+    context = "\n---\n".join([d["content"][:1500] for d in docs])
+    prompt = f"""基于以下知识库内容回答问题。
+    ## 知识库内容\n{context}
+    ## 用户问题\n{query}
+    ## 要求：只基于内容回答，不编造；不足时明确说明；标注来源"""
+
+    # 3. LLM 生成答案
+    answer = llm_chat(prompt)
+
+    # 4. 返回答案 + 来源列表
+    return {"answer": answer, "sources": [d["title"] for d in docs]}
+```
+
+### 5E.3 使用场景
+
+```bash
+# CLI 问答
+python xiaohongshu.py ask "字节跳动的Agent面试主要考什么？"
+
+# MCP 工具
+ask_kb(query="大厂Agent面试八股文有哪些？")
+```
+
+### 5E.4 返回示例
+
+```
+问: 字节跳动的Agent面试考什么？
+
+答: 字节的Agent面试主要考察以下方面：
+
+    1. Agent架构设计 — 常问 ReAct 模式、LLM推理引擎，
+       以及如何用 Reflection 提升成功率。
+    2. 多Agent协作 — 每个Agent有独立的 tool set...
+    3. 代码能力 — Python 必备，部分岗位问 Java/Go...
+    4. RAG技术原理 — BM25、向量检索、布隆过滤器...
+
+    📄 来源:
+    - 字节跳动Agent开发一面
+    - 字节AI Agent面试经验（已Offer）
+    - agent开发只会python不学java行不行
+```
+
+### 5E.5 与当前搜索的对比
+
+| | 当前搜索 | 加问答后 |
+|------|---------|---------|
+| 输入 | 关键词 | 自然语言问题 |
+| 输出 | 文档列表 | 结构化答案 + 引用来源 |
+| 使用方式 | 需要自己读文档 | 直接得到结论 |
+| 追问 | 不支持 | 可连续追问 |
+| 可追溯 | 有链接 | 有来源标注 |
+
+### 5E.6 改动范围
+
+| 文件 | 改动 | 工时 |
+|------|------|------|
+| `src/kb_agent/qa.py`（新） | RAG 问答引擎 + prompt 模板 | ~0.5h |
+| `src/cli.py` | 新增 `ask` 子命令 | ~0.25h |
+| `mcp_server/xhs_server.py` | 新增 `ask_kb` MCP 工具 | ~0.25h |
+| `src/config.py` | 新增 `qa_enabled` 配置 | ~5min |
+
+### 5E.7 预估
+
+- 工时：~1h
+- 新增依赖：无（复用现有 LLM client + 检索链路）
+- 每次问答调用 1 次 LLM API（与分类/格式化共享同一个 provider）
+
+---
+
+## 五-SEX、Web UI 可视化界面
+
+### 5F.1 当前问题
+
+功能分散在命令行、MCP 工具、独立 HTML 文件中，使用不便：
+- RAG 问答只能通过 CLI 或 MCP 调用
+- 知识图谱需要用 `python -m http.server` 单独启动
+- 文搜图只能用命令行
+- Pipeline 没有图形化的操作入口
+
+### 5F.2 方案
+
+单页面 Web UI，最小依赖（Python `http.server` + vanilla JS），四 Tab 布局：
+
+```
+┌─────────────────────────────────────────────────────┐
+│ 🧠 XHS Knowledge Base                              │
+│ [🏠 主页] [💬 RAG问答] [🕸️ 知识图谱] [🖼️ 文搜图]  │
+└─────────────────────────────────────────────────────┘
+```
+
+**Tab 1 — 主页**：
+- 关键词输入 + 数量选择 + [搜索小红书] [搜索知识库] [一键Pipeline]
+- Pipeline 运行时显示实时进度
+- 搜索结果列表
+
+**Tab 2 — RAG 问答**：
+- 对话框输入问题 → [提问] → 答案 + 来源引用
+- 对话式连续追问
+
+**Tab 3 — 知识图谱**：
+- 直接嵌入已有 `graph.html`（ECharts 力导向图）
+- 保留搜索、拖拽、分类着色功能
+
+**Tab 4 — 文搜图**：
+- 输入文字描述 → [搜索] → 图片卡片网格
+- 每张卡片显示图片 + 来源标题 + 上下文摘要
+
+### 5F.3 技术方案
+
+| 层 | 技术 | 说明 |
+|----|------|------|
+| 后端 | Python `http.server` | 零依赖，项目自带 |
+| 前端 | 单 HTML + vanilla JS + CSS | 无框架，直接 fetch API |
+| 通信 | REST-like GET/POST endpoints | `/api/search`, `/api/ask`, `/api/search-images`, `/api/pipeline` |
+
+### 5F.4 改动范围
+
+| 文件 | 改动 | 工时 |
+|------|------|------|
+| `webui/server.py`（新） | HTTP server + API 路由 + 静态文件服务 | ~1h |
+| `webui/index.html`（新） | 多 Tab 单页前端 + CSS 样式 | ~1.5h |
+| `webui/` 目录 | 新目录 | — |
+
+### 5F.5 启动方式
+
+```bash
+python webui/server.py
+# 浏览器打开 http://localhost:8080
+```
+
+### 5F.6 效果
+
+一个浏览器窗口完成所有操作——搜小红书、搜知识库、问答、看图、看图谱——不再需要切换命令行和多个页面。
+
+---
+
 ## 六、实施优先级
 
 | 优先级 | 改动项 | 预估工时 | 影响范围 | 效果 |
@@ -646,6 +804,8 @@ ChromaDB xhs_images 集合:
 | **P5** | 文搜图 | ~2h | 新增 image_indexer.py, rag_engine.py, searcher.py, cli.py, mcp_server | 文字搜索图片 |
 | **P6** | protobuf 加速 | ~0.5h | xiaohongshu.py | 底层序列化加速 |
 | **P6** | 图片去重 | ~0.5h | scraper.py | 节省存储和带宽 |
+| **P7** | RAG 问答系统 | ~1h | 新增 qa.py, cli.py, mcp_server, config.py | 搜+读+答闭环 |
+| **P8** | Web UI 可视化界面 | ~2.5h | 新增 webui/ 目录 | 问答+图谱+文搜图+主页一站式 |
 
 ---
 
@@ -672,3 +832,9 @@ ChromaDB xhs_images 集合:
 
 **第六阶段（1h）**：protobuf 加速 + 图片去重
 - 锦上添花，长久运行收益累积
+
+**第七阶段（1h）**：RAG 问答系统
+- 搜 + 读 + 答闭环，检索结果直接喂给 LLM 生成带来源的答案
+
+**第八阶段（2.5h）**：Web UI 可视化界面
+- 问答+图谱+文搜图+主页，一键式浏览器操作

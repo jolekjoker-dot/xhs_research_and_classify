@@ -6,6 +6,16 @@
 
 ## 2026-05-22
 
+### `d6f437c` feat: P5 — text-to-image search
+
+**改动范围**：文搜图功能（8 个文件）
+
+**影响文件**：`src/kb_agent/image_indexer.py`（新增）、`rag_engine.py`、`searcher.py`、`cli.py`、`config.py`、`mcp_server/xhs_server.py`、`docs/`
+
+**回退**：`git reset --hard d6f437c~1`
+
+---
+
 ### `c727c4a` feat: P4 — evaluation script + annotated labels + sem+rerank baseline
 
 **改动范围**：检索评测框架 + 5 个标注 query + sem+rerank 对比维度

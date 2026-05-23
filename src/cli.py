@@ -143,6 +143,33 @@ def cmd_classify(args: argparse.Namespace) -> None:
     tracker.step_end("classify", f"saved to {output_file}")
 
 
+def cmd_ask(args: argparse.Namespace) -> None:
+    """RAG 问答"""
+    from src.kb_agent.qa import answer_question
+
+    log = get_logger("xhs.ask")
+    add_file_handler(log)
+
+    result = answer_question(args.question, top_k=args.top_k)
+    print(f"\n{'='*60}")
+    print(f"问: {args.question}")
+    print(f"{'='*60}\n")
+    print(result["answer"])
+    if result["sources"]:
+        print(f"\n{'─'*60}")
+        print("📄 来源:")
+        for s in result["sources"]:
+            print(f"  - {s['title']} (相关度: {s['score']:.0%})")
+    print()
+
+    if args.output:
+        output = f"# Q: {args.question}\n\n{result['answer']}\n\n## Sources\n"
+        for s in result["sources"]:
+            output += f"- [{s['title']}]({s.get('url', s.get('path', ''))})\n"
+        Path(args.output).write_text(output, encoding="utf-8")
+        log.info("Saved to %s", args.output)
+
+
 def cmd_search_images(args: argparse.Namespace) -> None:
     """搜索图片"""
     from src.kb_agent.searcher import search_images, format_image_results
@@ -356,6 +383,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_img.add_argument("--count", type=int, default=5)
     p_img.add_argument("--output", default=None)
 
+    p_ask = sub.add_parser("ask", help="ask a question using RAG over the knowledge base")
+    p_ask.add_argument("question", help="question to answer (Chinese or English)")
+    p_ask.add_argument("--top-k", type=int, default=5)
+    p_ask.add_argument("--output", default=None)
+
     p_run = sub.add_parser("run", help="run full workflow: search -> scrape -> classify -> build")
     p_run.add_argument("--keywords", required=True, help="search keywords (comma-separated)")
     p_run.add_argument("--count", type=int, default=20)
@@ -380,6 +412,7 @@ def main(argv: list[str] | None = None) -> None:
         "classify": cmd_classify,
         "build": cmd_build,
         "search-images": cmd_search_images,
+        "ask": cmd_ask,
         "run": cmd_run,
     }
     handler = handlers.get(args.command)
