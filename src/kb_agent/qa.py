@@ -84,13 +84,14 @@ def _read_md_content(path_str: str, max_chars: int = 2000) -> str:
         return ""
 
 
-def answer_question(query: str, top_k: int = 5) -> dict:
+def answer_question(query: str, top_k: int = 5, method: str = "semantic+rerank") -> dict:
     """search knowledge base and generate answer with LLM
 
-    Returns {"answer": str, "sources": list[dict], "query": str}
+    method: keyword | semantic | rrf | rrf+rerank | semantic+rerank
+    Returns {"answer": str, "sources": list[dict], "query": str, "method": str}
     """
     # 1. Retrieve relevant documents
-    docs = hybrid_search(query, top_k=top_k)
+    docs = _search_by_method(query, top_k, method)
     if not docs:
         return {
             "answer": "知识库中未找到相关内容，无法回答此问题。",
@@ -148,4 +149,32 @@ def answer_question(query: str, top_k: int = 5) -> dict:
         "answer": answer,
         "sources": sources,
         "query": query,
+        "method": method,
     }
+
+
+def _search_by_method(query: str, top_k: int, method: str) -> list[dict]:
+    """dispatch to the right search method"""
+    from src.kb_agent.rag_engine import (
+        keyword_search, semantic_search, _rrf_fusion, hybrid_search,
+    )
+    from src.kb_agent.reranker import ReRanker
+
+    if method == "keyword":
+        return keyword_search(query, top_k=top_k)
+    elif method == "semantic":
+        return semantic_search(query, top_k=top_k)
+    elif method == "rrf":
+        kw = keyword_search(query, top_k=top_k)
+        sem = semantic_search(query, top_k=top_k)
+        return _rrf_fusion(kw, sem)[:top_k]
+    elif method == "rrf+rerank":
+        return hybrid_search(query, top_k=top_k, rerank=True)
+    elif method == "semantic+rerank":
+        candidates = semantic_search(query, top_k=max(top_k, 20))
+        reranker = ReRanker()
+        if reranker._load():
+            return reranker.rerank(query, candidates, top_k=top_k)
+        return candidates[:top_k]
+    else:
+        return hybrid_search(query, top_k=top_k, rerank=True)

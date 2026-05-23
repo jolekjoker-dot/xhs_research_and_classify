@@ -805,9 +805,107 @@ python webui/server.py
 - 前端：搜索结果列表和文档详情在同一区域切换，纯 CSS 过渡
 - 改动：`webui/server.py`（+15 行）、`webui/index.html`（+30 行）
 
-### 5F.7 效果
+### 5F.7 搜索方式切换
+
+在搜索和问答区域各加一个检索方式下拉选择，用户可按需切换：
+
+```
+搜索方式: [语义+重排 (综合最优) ▼]
+  ├─ 关键词匹配 (速度快，精确匹配)
+  ├─ 语义搜索 (理解含义，覆盖面广)
+  ├─ 混合RRF (双路融合，互补)
+  ├─ RRF+重排 (RRF融合后精排，更精准)
+  └─ 语义+重排 (语义候选+精排，综合最优)
+```
+
+| 下拉显示 | 实际方法 | 括号说明 |
+|---------|---------|---------|
+| 关键词匹配 | `keyword_search` | 速度快，精确匹配 |
+| 语义搜索 | `semantic_search` | 理解含义，覆盖面广 |
+| 混合RRF | `_rrf_fusion(keyword+semantic)` | 双路融合，互补 |
+| RRF+重排 | `hybrid_search(rerank=True)` | RRF融合后精排，更精准 |
+| 语义+重排 | semantic → reranker | 语义候选+精排，综合最优 |
+
+**交互**：
+- 搜索：选方法 → 输入关键词 → 搜索 → 结果上方显示当前方式
+- 问答：选方法 → 输入问题 → 提问 → 答案附带检索方式标注
+
+**改动**：`webui/index.html`（+30行），`webui/server.py`（+15行），~0.75h。
+
+### 5F.8 效果
 
 一个浏览器窗口完成所有操作——搜小红书、搜知识库、问答、看图、看图谱、展开阅读本地文档——不再需要切换命令行和多个页面。
+
+---
+
+## 五-SEPTEM、全链路追踪
+
+### 5G.1 当前问题
+
+RAG 问答、搜索等流程是黑盒——用户提问后只看到最终答案或文档列表，中间过程不可见：
+- 检索阶段命中了哪些文档、各自分数多少？
+- 重排阶段改变了什么排序？
+- LLM 拿到了多少上下文、耗时多久？
+- 哪个环节是性能瓶颈？
+
+### 5G.2 方案
+
+在整个检索链路的每个环节插入追踪点，记录输入/输出/耗时：
+
+```
+用户提问: "字节Agent面试考什么？"
+  ↓
+[检索] hybrid_search → 命中 12 篇候选，耗时 0.3s
+  ↓
+[粗排] RRF fusion → top-20，耗时 0.01s
+  ↓
+[精排] bge-reranker → top-5，耗时 0.15s
+  ↓
+[LLM] 传入 3247 chars 上下文 → mimo-v2.5 → 耗时 2.1s
+  ↓
+[答案] 字节Agent面试主要考察...
+  📄 [1] 字节跳动Agent开发一面 (0.89)
+  📄 [2] 字节AI Agent面试经验 (0.85)
+  📄 [3] 2026大模型Agent面试全攻略 (0.82)
+```
+
+**核心模块** `src/kb_agent/tracer.py`：
+
+```python
+@dataclass
+class TraceSpan:
+    name: str           # 环节名称
+    input: dict         # 输入参数 (query, top_k, ...)
+    output: dict        # 输出结果 (hits, scores, ...)
+    duration_ms: float  # 耗时毫秒
+    start_time: float
+
+class Trace:
+    def start(self, name: str, **input) -> None
+    def end(self, name: str, **output) -> TraceSpan
+    def summary(self) -> str  # 格式化输出追踪报告
+```
+
+在 `qa.py`、`rag_engine.py` 的关键函数中插入 trace 调用。
+
+### 5G.3 前端展示
+
+Web UI 问答结果下方折叠显示 "查看追踪详情"——展开后看到每一步的耗时和中间数据。
+
+### 5G.4 改动范围
+
+| 文件 | 改动 | 工时 |
+|------|------|------|
+| `src/kb_agent/tracer.py`（新） | Trace/TraceSpan 数据类 + 追踪逻辑 | ~0.5h |
+| `src/kb_agent/qa.py` | answer_question 中插入 trace | ~0.25h |
+| `src/kb_agent/rag_engine.py` | hybrid_search 中插入 trace | ~0.25h |
+| `webui/index.html` | 问答结果下显示折叠追踪面板 | ~0.5h |
+
+### 5G.5 预估
+
+- 工时：~1.5h
+- 新增依赖：无（纯 Python dataclass + time 模块）
+- 对性能影响：可忽略（每条 trace 只记录时间戳和计数字典）
 
 ---
 
@@ -832,6 +930,8 @@ python webui/server.py
 | **P7** | RAG 问答系统 | ~1h | 新增 qa.py, cli.py, mcp_server, config.py | 搜+读+答闭环 |
 | **P8** | Web UI 可视化界面 | ~2.5h | 新增 webui/ 目录 | 问答+图谱+文搜图+主页一站式 |
 | **P8** | Web UI 本地MD文档展开阅读 | ~0.5h | webui/server.py, webui/index.html | 搜索结果点击即展开本地文档 |
+| **P9** | Web UI 搜索方式下拉切换 | ~0.75h | webui/server.py, webui/index.html | 5种检索方式可选 |
+| **P10** | 全链路追踪 | ~1.5h | 新增 tracer.py, qa.py, rag_engine.py, webui/index.html | 检索-重排-LLM全流程可见可debug |
 
 ---
 
@@ -865,3 +965,9 @@ python webui/server.py
 **第八阶段（3h）**：Web UI 可视化界面 + 本地文档展开
 - 问答+图谱+文搜图+主页，一键式浏览器操作
 - 搜索结果点击即展开本地 MD 文档
+
+**第九阶段（0.75h）**：搜索方式下拉切换
+- 搜索和问答可切换 5 种检索方式（关键词/语义/RRF/RRF+重排/语义+重排），各有标注
+
+**第十阶段（1.5h）**：全链路追踪
+- 检索→重排→LLM 全流程可观测，每一步耗时和中间结果可见

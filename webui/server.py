@@ -98,9 +98,10 @@ class APIHandler(SimpleHTTPRequestHandler):
     def _search(self, qs):
         query = qs.get("query", [""])[0]
         top_k = int(qs.get("top_k", ["5"])[0])
-        from src.kb_agent.searcher import search, format_results
-        results = search(query, top_k=top_k)
+        method = qs.get("method", ["semantic+rerank"])[0]
+        results = self._run_search(query, top_k, method)
         return {
+            "method": method,
             "results": [{
                 "title": r.get("title", ""),
                 "path": r.get("path", ""),
@@ -116,8 +117,9 @@ class APIHandler(SimpleHTTPRequestHandler):
     def _ask(self, qs):
         question = qs.get("question", [""])[0]
         top_k = int(qs.get("top_k", ["5"])[0])
+        method = qs.get("method", ["semantic+rerank"])[0]
         from src.kb_agent.qa import answer_question
-        result = answer_question(question, top_k=top_k)
+        result = answer_question(question, top_k=top_k, method=method)
         return {
             "question": question,
             "answer": result["answer"],
@@ -183,6 +185,30 @@ class APIHandler(SimpleHTTPRequestHandler):
                 sections.append(chunk.strip())
         content = "\n\n".join(sections) if sections else text.strip()
         return {"content": content, "path": path}
+
+    @staticmethod
+    def _run_search(query, top_k, method):
+        from src.kb_agent.rag_engine import keyword_search, semantic_search, _rrf_fusion, hybrid_search
+        from src.kb_agent.reranker import ReRanker
+
+        if method == "keyword":
+            return keyword_search(query, top_k=top_k)
+        elif method == "semantic":
+            return semantic_search(query, top_k=top_k)
+        elif method == "rrf":
+            kw = keyword_search(query, top_k=top_k)
+            sem = semantic_search(query, top_k=top_k)
+            return _rrf_fusion(kw, sem)[:top_k]
+        elif method == "rrf+rerank":
+            return hybrid_search(query, top_k=top_k, rerank=True)
+        elif method == "semantic+rerank":
+            candidates = semantic_search(query, top_k=max(top_k, 20))
+            reranker = ReRanker()
+            if reranker._load():
+                return reranker.rerank(query, candidates, top_k=top_k)
+            return candidates[:top_k]
+        else:
+            return semantic_search(query, top_k=top_k)
 
     # ── helpers ────────────────────────────────────────────
 
